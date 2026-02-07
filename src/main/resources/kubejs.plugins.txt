@@ -1,0 +1,1 @@
+dev.wolfieboy09.researchtree.integration.kubejs.ResearchTreeKubePlugin researchtree

@@ -1,0 +1,49 @@
+{
+  "key.researchtree.open_research_tree": "Open Research Tree",
+  "key.categories.researchtree": "Research Tree",
+
+  "screen.researchtree.title": "Research Tree",
+  "creative_tab.researchtree": "Research Tree",
+
+  "tooltip.researchtree.research_node_id": "Research Node ID: %s",
+
+  "message.researchtree.no_table": "You need to have a research table first",
+  "message.researchtree.already_has_table": "You already have a research table",
+  "message.researchtree.reward_failed": "Granting you the reward %s has failed! See logs for more.",
+  "message.researchtree.table_missing": "You're missing a research table!",
+  "message.researchtree.not_your_table": "This research table is not your table...",
+
+  "toast.researchtree.research_completed": "Research Completed",
+
+  "gui.researchtree.close": "Close",
+  "gui.researchtree.start_research": "Start Research",
+  "gui.researchtree.status.completed": "Research Completed",
+  "gui.researchtree.status.in_progress": "Researched %s",
+  "gui.researchtree.prerequisites": "Prerequisites",
+  "gui.researchtree.requirements": "Requirements",
+  "gui.researchtree.no_requirements": "No Requirements",
+  "gui.researchtree.rewards": "Rewards",
+  "gui.researchtree.no_rewards": "No Rewards",
+  "gui.researchtree.warning.no_table": "No Research Table",
+  "gui.researchtree.warning.missing_prerequisites": "Your missing the required prerequisites",
+
+  "requirement.researchtree.advancement.single": "Advancement: %s",
+  "requirement.researchtree.advancement.multiple": "Number of Advancements: %s",
+  "requirement.researchtree.dimension": "Dimensions Visited: %s / %s",
+  "requirement.researchtree.energy": "Energy (FE): %s / %s",
+  "requirement.researchtree.fluid": "%s: %s / %s",
+  "requirement.researchtree.item": "%s: %s / %s",
+  "requirement.researchtree.time.complete": "Time required met",
+  "requirement.researchtree.time": "Remaining Time: %s minutes %s seconds",
+  "requirement.kubejs.stage": "Stage Unlocked: %s",
+
+  "reward.researchtree.failed": "A research reward failed to be granted. See logs for more.",
+  "reward.researchtree.command": "Command: %s",
+  "reward.researchtree.experience.levels": "Experience levels: %s",
+  "reward.researchtree.experience.points": "Experience points: %s",
+  "reward.researchtree.item": "%sx %s",
+  "reward.researchtree.loot_table": "Loot Table: %s",
+  "reward.researchtree.recipe.single": "Unlocked Recipe: %s",
+  "reward.researchtree.recipe.multiple": "Unlocked Recipes: %s",
+  "reward.kubejs.unlocked_stage": "Unlocks Stage: %s"
+}
