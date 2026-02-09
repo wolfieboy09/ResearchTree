@@ -138,17 +138,15 @@ public class ResearchTreeScreen extends Screen {
         if (selectedCategoryId == null) return;
 
         Collection<ResearchNode> nodes = ResearchNodeManager.getAllNodes().values().stream()
-                .filter(node -> {
-                    if (node.category().isEmpty()) {
-                        return selectedCategoryId.equals(ResearchTreeMod.byId("uncategorized"));
-                    }
-                    return node.category().get().id().equals(selectedCategoryId);
-                }).toList();
-
+                .filter(node ->
+                        node.category().isEmpty()
+                                ? selectedCategoryId.equals(ResearchTreeMod.byId("uncategorized"))
+                                : node.category().get().id().equals(selectedCategoryId)).toList();
         for (ResearchNode node : nodes) {
-            //TODO if parent node is completed, show rest of branch
-            // If another node is hidden inside the branch, same rule applies
-            if (node.hidden()) continue;
+            if (node.hidden() && !shouldShowHiddenNode(node)) {
+                continue;
+            }
+
             int x = CATEGORY_PANEL_WIDTH + PADDING + (node.gridPos().x() * GRID_SIZE) + (int) scrollX;
             int y = PADDING + 30 + (node.gridPos().y() * GRID_SIZE) + (int) scrollY;
 
@@ -163,6 +161,10 @@ public class ResearchTreeScreen extends Screen {
             nodeButtons.add(button);
             this.addRenderableWidget(button);
         }
+    }
+
+    private boolean shouldShowHiddenNode(ResearchNode node) {
+        return node.prerequisites().stream().anyMatch(data::isCompleted);
     }
 
     private void openDetailsPanel(ResearchNode node) {
