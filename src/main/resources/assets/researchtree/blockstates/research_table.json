@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "researchtree:block/research_table",
+      "y": 90
+    },
+    "facing=north": {
       "model": "researchtree:block/research_table"
+    },
+    "facing=south": {
+      "model": "researchtree:block/research_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "researchtree:block/research_table",
+      "y": 270
     }
   }
 }
