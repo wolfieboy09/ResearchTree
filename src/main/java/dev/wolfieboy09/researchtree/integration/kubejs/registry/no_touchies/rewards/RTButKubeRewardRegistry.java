@@ -1,6 +1,7 @@
 package dev.wolfieboy09.researchtree.integration.kubejs.registry.no_touchies.rewards;
 
 import com.mojang.serialization.MapCodec;
+import dev.latvian.mods.kubejs.KubeJS;
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
 import dev.wolfieboy09.researchtree.api.research.ResearchReward;
 import dev.wolfieboy09.researchtree.core.ResearchRewardType;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RTButKubeRewardRegistry {
     public static final DeferredRegister<ResearchRewardType<?>> KUBE_REWARD_TYPES =
-            DeferredRegister.create(RTRewardTypes.REWARD_TYPE_REGISTRY_KEY, ResearchTreeMod.MOD_ID);
+            DeferredRegister.create(RTRewardTypes.REWARD_TYPE_REGISTRY_KEY, KubeJS.MOD_ID);
 
     public static final DeferredHolder<ResearchRewardType<?>, ResearchRewardType<PlayerUnlockStageReward>> POTION_EFFECT =
             create("effect", PlayerUnlockStageReward.CODEC);
