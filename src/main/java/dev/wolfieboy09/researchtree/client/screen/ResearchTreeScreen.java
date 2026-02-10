@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 import org.lwjgl.glfw.GLFW;
@@ -117,7 +118,7 @@ public class ResearchTreeScreen extends Screen {
 
         for (ResearchCategory category : lockedCategories) {
             if (yPos + CATEGORY_BUTTON_HEIGHT >= CATEGORY_HEADER_HEIGHT && yPos < height) {
-                Component lockedName = Component.literal("🔒 ").append(category.name()).withStyle(ChatFormatting.GRAY);
+                Component lockedName = ((MutableComponent) category.name()).withStyle(ChatFormatting.GRAY);
                 Button lockedBtn = Button.builder(lockedName, btn -> {})
                         .bounds(PADDING, yPos, CATEGORY_PANEL_WIDTH - PADDING * 2, CATEGORY_BUTTON_HEIGHT)
                         .build();
