@@ -1,5 +1,5 @@
 {
-	"format_version": "1.21.11",
+	"format_version": "1.9.0",
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "researchtree:block/research_table",
@@ -21,9 +21,9 @@
 		},
 		{
 			"name": "base",
-			"from": [0, 11, 0],
-			"to": [16, 13, 16],
-			"rotation": {"angle": -12.5, "axis": "x", "origin": [0, 12, 0]},
+			"from": [0, 10, 0],
+			"to": [16, 12, 16],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [0, 11, 0]},
 			"faces": {
 				"north": {"uv": [0, 8, 4, 8.5], "texture": "#0"},
 				"east": {"uv": [8, 0, 12, 0.5], "texture": "#0"},
@@ -35,9 +35,9 @@
 		},
 		{
 			"name": "stand",
-			"from": [7, 1, 10],
-			"to": [9, 14, 12],
-			"rotation": {"x": 0, "y": 90, "z": 0, "origin": [7, 1, 10]},
+			"from": [7, 1, 8],
+			"to": [9, 14, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 8]},
 			"faces": {
 				"north": {"uv": [8, 1.5, 8.5, 4.75], "texture": "#0"},
 				"east": {"uv": [4, 8, 4.5, 11.25], "texture": "#0"},
@@ -48,6 +48,7 @@
 			}
 		},
 		{
+			"name": "support",
 			"from": [0, 1, 7],
 			"to": [2, 7, 9],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 1, 7]},
@@ -61,6 +62,7 @@
 			}
 		},
 		{
+			"name": "head",
 			"from": [0, 7, 6],
 			"to": [2, 11, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [0, 7, 7]},
@@ -74,6 +76,7 @@
 			}
 		},
 		{
+			"name": "support",
 			"from": [14, 1, 7],
 			"to": [16, 7, 9],
 			"rotation": {"angle": 0, "axis": "y", "origin": [14, 1, 7]},
@@ -87,6 +90,7 @@
 			}
 		},
 		{
+			"name": "head",
 			"from": [14, 7, 6],
 			"to": [16, 11, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [14, 7, 7]},
@@ -100,32 +104,46 @@
 			}
 		},
 		{
-			"from": [7, 1, 16],
-			"to": [9, 7, 18],
-			"rotation": {"x": 0, "y": 90, "z": 0, "origin": [7, 1, 16]},
+			"name": "support",
+			"from": [5, 1, 14],
+			"to": [7, 7, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 14]},
 			"faces": {
-				"north": {"uv": [9, 4, 9.5, 5.5], "texture": "#0"},
-				"east": {"uv": [5, 9, 5.5, 10.5], "texture": "#0"},
-				"south": {"uv": [5.5, 9, 6, 10.5], "texture": "#0"},
-				"west": {"uv": [9, 5.5, 9.5, 7], "texture": "#0"},
-				"up": {"uv": [10, 4, 9.5, 3.5], "texture": "#0"},
-				"down": {"uv": [10, 4, 9.5, 4.5], "texture": "#0"}
+				"north": {"uv": [9, 5.5, 9.5, 7], "texture": "#0"},
+				"east": {"uv": [9, 4, 9.5, 5.5], "texture": "#0"},
+				"south": {"uv": [5, 9, 5.5, 10.5], "texture": "#0"},
+				"west": {"uv": [5.5, 9, 6, 10.5], "texture": "#0"},
+				"up": {"uv": [10, 4, 9.5, 3.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [10, 4, 9.5, 4.5], "rotation": 270, "texture": "#0"}
 			}
 		},
 		{
-			"from": [7, 7, 15],
-			"to": [9, 11, 19],
-			"rotation": {"x": 0, "y": 90, "z": 0, "origin": [7, 7, 16]},
+			"name": "head",
+			"from": [4, 7, 14],
+			"to": [8, 11, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 7, 14]},
 			"faces": {
-				"north": {"uv": [8.5, 9, 9, 10], "texture": "#0"},
-				"east": {"uv": [0, 8.5, 1, 9.5], "texture": "#0"},
-				"south": {"uv": [9, 9, 9.5, 10], "texture": "#0"},
-				"west": {"uv": [1, 8.5, 2, 9.5], "texture": "#0"},
-				"up": {"uv": [0.5, 10.5, 0, 9.5], "texture": "#0"},
-				"down": {"uv": [1, 9.5, 0.5, 10.5], "texture": "#0"}
+				"north": {"uv": [1, 8.5, 2, 9.5], "texture": "#0"},
+				"east": {"uv": [8.5, 9, 9, 10], "texture": "#0"},
+				"south": {"uv": [0, 8.5, 1, 9.5], "texture": "#0"},
+				"west": {"uv": [9, 9, 9.5, 10], "texture": "#0"},
+				"up": {"uv": [0.5, 10.5, 0, 9.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [1, 9.5, 0.5, 10.5], "rotation": 270, "texture": "#0"}
 			}
 		}
 	],
+	"display": {
+		"ground": {
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"gui": {
+			"rotation": [-168.08, 52.91, -177.5],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"on_shelf": {
+			"rotation": [0, -180, 0]
+		}
+	},
 	"groups": [
 		0,
 		1,
@@ -136,19 +154,19 @@
 			"color": 0,
 			"children": [
 				{
-					"name": "thing",
+					"name": "insertion",
 					"origin": [0, 0, 0],
 					"color": 0,
 					"children": [3, 4]
 				},
 				{
-					"name": "thing",
+					"name": "insertion",
 					"origin": [0, 0, 0],
 					"color": 0,
 					"children": [5, 6]
 				},
 				{
-					"name": "thing",
+					"name": "insertion",
 					"origin": [0, 0, 0],
 					"color": 0,
 					"children": [7, 8]
