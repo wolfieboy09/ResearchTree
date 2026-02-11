@@ -1,5 +1,6 @@
 package dev.wolfieboy09.researchtree.rewards;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.researchtree.api.research.ResearchReward;
@@ -9,13 +10,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Attr;
 
 public record AttributeModifierReward(
         Holder<Attribute> attribute,
@@ -27,8 +28,8 @@ public record AttributeModifierReward(
             instance.group(
                     BuiltInRegistries.ATTRIBUTE.holderByNameCodec().fieldOf("attribute").forGetter(AttributeModifierReward::attribute),
                     ResourceLocation.CODEC.fieldOf("modifier_id").forGetter(AttributeModifierReward::modifierId),
-                    ExtraCodecs.POSITIVE_FLOAT.fieldOf("amount").forGetter(r -> (float) r.amount),
-                    AttributeModifier.Operation.CODEC.fieldOf("operation").forGetter(AttributeModifierReward::operation)
+                    Codec.FLOAT.fieldOf("amount").forGetter(r -> (float) r.amount),
+                    AttributeModifier.Operation.CODEC.optionalFieldOf("operation", AttributeModifier.Operation.ADD_VALUE).forGetter(AttributeModifierReward::operation)
             ).apply(instance, AttributeModifierReward::new)
     );
 
