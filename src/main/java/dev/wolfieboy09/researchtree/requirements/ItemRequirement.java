@@ -26,7 +26,7 @@ public class ItemRequirement implements ResearchRequirement<ItemStack> {
                                     BuiltInRegistries.ITEM.byNameCodec()
                             ).fieldOf("item").forGetter(r -> r.target),
 
-                            Codec.INT.fieldOf("count").forGetter(r -> r.requiredCount),
+                            Codec.INT.optionalFieldOf("count", 1).forGetter(r -> r.requiredCount),
 
                             ComponentSerialization.CODEC
                                     .optionalFieldOf("display_name", Component.empty())
