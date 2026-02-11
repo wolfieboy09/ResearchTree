@@ -145,7 +145,7 @@ public class ResearchTreeScreen extends Screen {
                 .filter(node ->
                         node.category().isEmpty()
                                 ? selectedCategoryId.equals(ResearchTreeMod.byId("uncategorized"))
-                                : node.category().get().id().equals(selectedCategoryId)).toList();
+                                : ResearchCategoryManager.hasCategory(node.category().get())).toList();
         for (ResearchNode node : nodes) {
             if (node.hidden() && !shouldShowHiddenNode(node)) {
                 continue;

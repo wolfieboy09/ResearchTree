@@ -8,6 +8,8 @@ import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.integration.kubejs.KubeJSBridge;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
@@ -78,6 +80,14 @@ public final class ResearchNodeManager extends SimplePreparableReloadListener<Ma
                                         ResourceLocation.fromNamespaceAndPath(namespace, fileName),
                                         json.get("id")
                                 );
+                            }
+                        }
+
+                        if (!json.has("title")) {
+                            var defaultedTitle = Component.translatable("node." + id.toString().replace(":", ".") + ".title");
+                            var encoded = ComponentSerialization.CODEC.encodeStart(JsonOps.INSTANCE, defaultedTitle);
+                            if (encoded.result().isPresent()) {
+                                json.add("title", encoded.result().get());
                             }
                         }
 

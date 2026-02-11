@@ -33,7 +33,7 @@ public class ResearchNodeBuilder {
     private transient final List<ResearchReward> rewards;
     private transient GridPosition gridPos = new GridPosition(0, 0);
     @Nullable
-    private transient ResearchCategory category = null;
+    private transient ResourceLocation category = null;
     private transient boolean hidden = false;
     private transient ResearchProgressData progressData = ResearchProgressData.DEFAULT;
     private transient ResearchModificationEventJS parentEvent;
@@ -129,13 +129,11 @@ public class ResearchNodeBuilder {
     }
 
     public ResearchNodeBuilder category(ResourceLocation categoryId) {
-        ResearchCategory existingCategory = ResearchCategoryManager.getCategory(categoryId);
-
-        if (existingCategory == null) {
+        if (ResearchCategoryManager.getCategory(categoryId) == null) {
             throw new KubeRuntimeException("The category " + categoryId + " does not exist");
         }
 
-        this.category = existingCategory;
+        this.category = categoryId;
         return this;
     }
 

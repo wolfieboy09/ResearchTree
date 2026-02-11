@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record ResearchProgressData(int ticksPerPercent) {
     public static final Codec<ResearchProgressData> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    Codec.INT.fieldOf("ticks_per_percent").forGetter(ResearchProgressData::ticksPerPercent)
+                    Codec.INT.fieldOf("tpp").forGetter(ResearchProgressData::ticksPerPercent)
             ).apply(instance, ResearchProgressData::new)
     );
 
