@@ -51,6 +51,7 @@ public final class ResearchNodeManager extends SimplePreparableReloadListener<Ma
                     String fileName = relativePath.contains("/")
                             ? relativePath.substring(relativePath.lastIndexOf('/') + 1)
                             : relativePath;
+
                     ResourceLocation id = ResourceLocation.fromNamespaceAndPath(namespace, fileName);
 
                     String categoryName = relativePath.contains("/")
@@ -64,6 +65,20 @@ public final class ResearchNodeManager extends SimplePreparableReloadListener<Ma
                             JsonObject categoryJson = new JsonObject();
                             categoryJson.addProperty("name", categoryName.replace('/', '.'));
                             json.add("category", categoryJson);
+                        }
+
+                        if (json.has("id")) {
+                            ResourceLocation parsed = ResourceLocation.tryParse(json.get("id").getAsString());
+                            if (parsed != null) {
+                                id = parsed;
+                            } else {
+                                LOGGER.error(
+                                        "File {} attempted to override {} with invalid id '{}'",
+                                        relativePath,
+                                        ResourceLocation.fromNamespaceAndPath(namespace, fileName),
+                                        json.get("id")
+                                );
+                            }
                         }
 
                         jsons.put(id, json);
