@@ -1,7 +1,6 @@
 package dev.wolfieboy09.researchtree.integration.kubejs.registry.no_touchies.requirements;
 
 import dev.latvian.mods.kubejs.KubeJS;
-import dev.wolfieboy09.researchtree.ResearchTreeMod;
 import dev.wolfieboy09.researchtree.core.ResearchRequirementType;
 import dev.wolfieboy09.researchtree.registries.RTRequirementTypes;
 import net.neoforged.neoforge.registries.DeferredHolder;

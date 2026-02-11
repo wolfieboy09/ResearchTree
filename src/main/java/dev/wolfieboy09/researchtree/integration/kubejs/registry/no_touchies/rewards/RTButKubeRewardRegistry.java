@@ -2,7 +2,6 @@ package dev.wolfieboy09.researchtree.integration.kubejs.registry.no_touchies.rew
 
 import com.mojang.serialization.MapCodec;
 import dev.latvian.mods.kubejs.KubeJS;
-import dev.wolfieboy09.researchtree.ResearchTreeMod;
 import dev.wolfieboy09.researchtree.api.research.ResearchReward;
 import dev.wolfieboy09.researchtree.core.ResearchRewardType;
 import dev.wolfieboy09.researchtree.registries.RTRewardTypes;
