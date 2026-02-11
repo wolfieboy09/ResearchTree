@@ -35,6 +35,7 @@ public record LootTableReward(ResourceKey<LootTable> lootTable) implements Resea
             LootParams params = new LootParams.Builder(serverLevel)
                     .withParameter(LootContextParams.THIS_ENTITY, player)
                     .withParameter(LootContextParams.ORIGIN, player.position())
+                    .withLuck(player.getLuck())
                     .create(LootContextParamSets.GIFT);
 
             LootTable table = serverLevel.getServer().reloadableRegistries()
