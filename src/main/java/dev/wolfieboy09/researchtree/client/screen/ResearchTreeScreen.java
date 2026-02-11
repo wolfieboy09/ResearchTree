@@ -1,6 +1,7 @@
 package dev.wolfieboy09.researchtree.client.screen;
 
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
+import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchDetailsPanel;
@@ -16,7 +17,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -73,7 +76,7 @@ public class ResearchTreeScreen extends Screen {
         }
     }
 
-    private ResourceLocation getFirstAvailableCategory() {
+    private @Nullable ResourceLocation getFirstAvailableCategory() {
         List<ResearchCategory> categories = ResearchCategoryManager.getUnlockedCategories(data);
         return categories.isEmpty() ? null : categories.getFirst().id();
     }
@@ -259,7 +262,7 @@ public class ResearchTreeScreen extends Screen {
         }
     }
 
-    private ResearchNodeButton findButtonForNode(ResourceLocation nodeId) {
+    private @Nullable ResearchNodeButton findButtonForNode(ResourceLocation nodeId) {
         for (ResearchNodeButton btn : nodeButtons) {
             if (btn.getNode().id().equals(nodeId)) {
                 return btn;
@@ -395,15 +398,9 @@ public class ResearchTreeScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            if (detailsPanel != null) {
-                closeDetailsPanel();
-                return true;
-            }
-        }
-
-        return super.keyPressed(keyCode, scanCode, modifiers);
+    public void onClose() {
+        RTUtil.callNotNull(detailsPanel, this::closeDetailsPanel);
+        super.onClose();
     }
 
     @Override

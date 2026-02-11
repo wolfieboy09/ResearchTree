@@ -12,4 +12,13 @@ public class RTUtil {
             consumer.accept(object);
         }
     }
+
+    /**
+     * Runs the given {@link Runnable} to the provided object if it is not {@code null}
+     */
+    public static <T> void callNotNull(@Nullable T object, Runnable runnable) {
+        if (object != null) {
+           runnable.run();
+        }
+    }
 }
