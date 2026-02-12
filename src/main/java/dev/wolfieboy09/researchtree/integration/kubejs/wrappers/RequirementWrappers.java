@@ -76,6 +76,18 @@ public class RequirementWrappers {
         return new DimensionRequirement(List.copyOf(dimensions));
     }
 
+    public static TimedDimensionRequirement dimension(ResourceKey<Level> dimension, int duration) {
+        return new TimedDimensionRequirement(List.of(dimension), duration);
+    }
+
+    public static TimedDimensionRequirement dimensions(ResourceKey<Level> dimension, int duration) {
+        return new TimedDimensionRequirement(List.of(dimension), duration);
+    }
+
+    public static TimedDimensionRequirement dimensions(List<ResourceKey<Level>> dimensions, int duration) {
+        return new TimedDimensionRequirement(List.copyOf(dimensions), duration);
+    }
+
     public static TimeRequirement time(TickDuration ticks) {
         return new TimeRequirement(ticks.intTicks());
     }
