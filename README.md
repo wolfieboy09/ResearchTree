@@ -8,6 +8,7 @@ Most (not all) things are listed on the wiki. See the wiki before making a quest
 # Questions and Answers
 ## Is there a Discord server?
 Yes, there is! For questions and other things. https://discord.gg/YES3afRvrx
+Don't be scared of questions! I'll try to help you out.
 
 ## Will this be back-ported to 1.20.1???
 **No.** I do not want to port this mod down to 1.20.1, and will be sticking with 1.21.1+ on NeoForge.
