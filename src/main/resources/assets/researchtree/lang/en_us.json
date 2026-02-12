@@ -36,6 +36,7 @@
   "requirement.researchtree.time.complete": "Time required met",
   "requirement.researchtree.time": "Remaining Time: %s minutes %s seconds",
   "requirement.kubejs.stage": "Stage Unlocked: %s",
+  "requirement.researchtree.timed_dimension": "Visit %s/%s dimensions for %s seconds",
 
   "reward.researchtree.failed": "A research reward failed to be granted. See logs for more.",
   "reward.researchtree.command": "Command: %s",

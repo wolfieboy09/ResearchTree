@@ -36,6 +36,9 @@ public final class RTRequirementTypes {
     public static final DeferredHolder<ResearchRequirementType<?>, ResearchRequirementType<DimensionRequirement>> DIMENSION =
             REQUIREMENT_TYPES.register("dimension", () -> new ResearchRequirementType<>(DimensionRequirement.CODEC));
 
+    public static final DeferredHolder<ResearchRequirementType<?>, ResearchRequirementType<TimedDimensionRequirement>> TIMED_DIMENSION =
+            REQUIREMENT_TYPES.register("timed_dimension", () -> new ResearchRequirementType<>(TimedDimensionRequirement.CODEC));
+
     public static final DeferredHolder<ResearchRequirementType<?>, ResearchRequirementType<AdvancementRequirement>> ADVANCEMENT =
             REQUIREMENT_TYPES.register("advancement", () -> new ResearchRequirementType<>(AdvancementRequirement.CODEC));
 }

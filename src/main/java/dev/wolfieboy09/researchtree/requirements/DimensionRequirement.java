@@ -67,4 +67,8 @@ public class DimensionRequirement implements ResearchRequirement<ResourceKey<Lev
     public @NotNull ResearchRequirementType<?> getType() {
         return RTRequirementTypes.DIMENSION.get();
     }
+
+    public List<ResourceKey<Level>> getRequiredDimensions() {
+        return List.copyOf(this.requiredDimensions);
+    }
 }
