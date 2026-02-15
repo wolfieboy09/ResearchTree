@@ -1,0 +1,37 @@
+name: Bug report
+description: Report unintended behavior
+title: "[Bug]: "
+labels: ["bug"]
+assignees: ["wolfieboy09"]
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce it?
+    validations:
+      required: true
+
+  - type: input
+    id: mc_version
+    attributes:
+      label: Minecraft version
+
+  - type: input
+    id: mod_version
+    attributes:
+      label: Mod version
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
