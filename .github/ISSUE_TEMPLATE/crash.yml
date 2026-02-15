@@ -1,0 +1,29 @@
+name: Crash report
+description: Report a crash
+title: "[Crash]: "
+labels: ["crash", "bug"]
+assignees: ["wolfieboy09"]
+
+body:
+  - type: textarea
+    id: crash_log
+    attributes:
+      label: Crash log
+      description: Paste the full crash report
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What were you doing?
+
+  - type: input
+    id: mc_version
+    attributes:
+      label: Minecraft version
+
+  - type: input
+    id: mod_version
+    attributes:
+      label: Mod version
