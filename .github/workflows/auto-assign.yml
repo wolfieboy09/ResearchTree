@@ -1,0 +1,19 @@
+name: Auto assign
+
+on:
+  issues:
+    types:
+      - opened
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign to me
+        uses: pozil/auto-assign-issue@v1
+        with:
+          assignees: wolfieboy09
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
