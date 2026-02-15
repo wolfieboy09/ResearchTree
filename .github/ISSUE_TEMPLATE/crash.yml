@@ -23,7 +23,7 @@ body:
     attributes:
       label: Minecraft version
 
-- type: input
+  - type: input
     id: neoforge_version
     attributes:
       label: NeoForge version
