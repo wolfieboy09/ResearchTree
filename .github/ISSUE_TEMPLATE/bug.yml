@@ -29,9 +29,14 @@ body:
   - type: input
     id: mod_version
     attributes:
-      label: Mod version
+      label: ResearchTree version
+
+  - type: input
+    id: neoforge_version
+    attributes:
+      label: NeoForge version
 
   - type: textarea
     id: logs
     attributes:
-      label: Logs
+      label: Logs (use https://mclo.gs or gnomebot)

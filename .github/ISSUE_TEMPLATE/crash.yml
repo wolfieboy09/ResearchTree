@@ -23,7 +23,12 @@ body:
     attributes:
       label: Minecraft version
 
+- type: input
+    id: neoforge_version
+    attributes:
+      label: NeoForge version
+
   - type: input
     id: mod_version
     attributes:
-      label: Mod version
+      label: ResearchTree version
