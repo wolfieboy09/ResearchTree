@@ -20,6 +20,7 @@ public interface ResearchRequirement<T> {
 
     float getProgress(Player player);
 
+    @NotNull
     Component getDisplayText();
 
     @NotNull

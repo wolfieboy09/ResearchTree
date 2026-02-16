@@ -107,7 +107,7 @@ public class ItemRequirement implements ResearchRequirement<ItemStack> {
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         return Component.translatable(
                 "requirement.researchtree.item",
                 displayName,

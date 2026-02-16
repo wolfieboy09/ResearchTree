@@ -37,7 +37,7 @@ public record PlayerStageRequirement(String stage) implements ResearchRequiremen
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         return Component.translatable("requirement.kubejs.stage", this.stage);
     }
 

@@ -72,7 +72,7 @@ public class FluidRequirement implements ResearchRequirement<FluidStack> {
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         return Component.translatable(
                 "requirement.researchtree.fluid",
                 required.getHoverName(),

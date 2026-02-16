@@ -76,7 +76,7 @@ public record AdvancementRequirement(
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         if (requiredAdvancements.size() == 1) {
             return Component.translatable(
                     "requirement.researchtree.advancement.single",

@@ -64,7 +64,7 @@ public class KubeRequirement implements ResearchRequirement<Object> {
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         return Objects.requireNonNullElseGet(this.displayTextGetter, () -> Component.translatable("requirement.kubejs." + requirementId.getPath()));
     }
 

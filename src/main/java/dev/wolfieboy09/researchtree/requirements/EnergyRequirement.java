@@ -67,7 +67,7 @@ public class EnergyRequirement implements ResearchRequirement<Integer> {
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         return Component.translatable(
                 "requirement.researchtree.energy",
                 currentAmount,

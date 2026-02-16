@@ -89,7 +89,7 @@ public class TimedDimensionRequirement extends DimensionRequirement {
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         int completedDimensions = 0;
         for (ResourceKey<Level> dimension : getRequiredDimensions()) {
             if (totalTimeSpent.getOrDefault(dimension, 0L) >= duration) {

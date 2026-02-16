@@ -55,7 +55,7 @@ public class DimensionRequirement implements ResearchRequirement<ResourceKey<Lev
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         return Component.translatable(
                 "requirement.researchtree.dimension",
                 visitedDimensions.size(),

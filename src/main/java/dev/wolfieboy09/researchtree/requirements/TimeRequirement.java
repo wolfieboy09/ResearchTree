@@ -54,7 +54,7 @@ public class TimeRequirement implements ResearchRequirement<Integer> {
     }
 
     @Override
-    public Component getDisplayText() {
+    public @NotNull Component getDisplayText() {
         int remainingSeconds = (requiredTicks - currentTicks) / 20;
         int minutes = remainingSeconds / 60;
         int seconds = remainingSeconds % 60;
