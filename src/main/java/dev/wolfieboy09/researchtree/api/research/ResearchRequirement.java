@@ -18,7 +18,9 @@ public interface ResearchRequirement<T> {
 
     boolean isMet(Player player);
 
-    float getProgress(Player player);
+    default float getProgress(Player player) {
+        return isMet(player) ? 1 : 0;
+    }
 
     @NotNull
     Component getDisplayText();
