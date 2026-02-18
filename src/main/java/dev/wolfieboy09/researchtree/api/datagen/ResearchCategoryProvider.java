@@ -58,6 +58,10 @@ public abstract class ResearchCategoryProvider implements DataProvider {
                     .resolve("categories")
                     .resolve(category.id().getPath() + ".json");
 
+            if (builder.name.equals(Component.empty())) {
+                builder.name = Component.translatable("category." + builder.id.toString().replace(":", "."));
+            }
+
             futures.add(DataProvider.saveStable(cachedOutput, json, filePath));
         }
 
