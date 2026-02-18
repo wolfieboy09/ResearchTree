@@ -123,6 +123,18 @@ publishing {
         maven {
             url "file://${project.projectDir}/repo"
         }
+
+        maven {
+            name = "cloudsmith"
+            url = "https://maven.cloudsmith.io/wolfieboy09/research-tree/"
+            //def releasesRepoUrl = "https://maven.cloudsmith.io/wolfieboy09/research-tree/"
+            //def snapshotsRepoUrl = "https://maven.cloudsmith.io/wolfieboy09/research-tree/"
+            //url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = project.property("cloudsmith.username")
+                password = project.property("cloudsmith.publishing.apiKey")
+            }
+        }
     }
 }
 
