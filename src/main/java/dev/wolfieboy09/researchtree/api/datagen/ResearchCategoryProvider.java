@@ -79,8 +79,7 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         private Component name;
         private Component description = Component.empty();
         private ItemStack icon = ItemStack.EMPTY;
-        private Optional<ResourceLocation> unlockRequirement = Optional.empty();
-        private final List<ResourceLocation> prerequisites = new ArrayList<>();
+        private final List<ResourceLocation> unlockRequirements = List.of();
         private int sortOrder = 0;
 
         private Builder(ResourceLocation id) {
@@ -100,6 +99,10 @@ public abstract class ResearchCategoryProvider implements DataProvider {
             return this;
         }
 
+        public Builder description() {
+            return description(Component.translatable("category." + id.toString().replace(":", ".") + ".description"));
+        }
+
         public Builder icon(ItemStack icon) {
             this.icon = icon;
             return this;
@@ -110,12 +113,12 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         }
 
         public Builder unlockRequirement(ResourceLocation researchId) {
-            this.unlockRequirement = Optional.of(researchId);
+            this.unlockRequirements.add(researchId);
             return this;
         }
 
-        public Builder prerequisite(ResourceLocation categoryId) {
-            this.prerequisites.add(categoryId);
+        public Builder prerequisite(List<ResourceLocation> researchIds) {
+            this.unlockRequirements.addAll(researchIds);
             return this;
         }
 
@@ -126,8 +129,7 @@ public abstract class ResearchCategoryProvider implements DataProvider {
 
         ResearchCategory build() {
             return new ResearchCategory(
-                    id, name, description, icon,
-                    unlockRequirement, List.copyOf(prerequisites), sortOrder
+                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder
             );
         }
     }

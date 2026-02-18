@@ -19,9 +19,7 @@ public class ResearchCategoryBuilder {
     private transient Component name;
     private transient Component description;
     private transient ItemStack icon;
-    @Nullable
-    private transient ResourceLocation unlockRequirement;
-    private transient List<ResourceLocation> prerequisites;
+    private transient List<ResourceLocation> unlockRequirements;
     private transient int sortOrder;
 
     private ResearchCategoryModificationJS parentEvent = null;
@@ -41,8 +39,7 @@ public class ResearchCategoryBuilder {
         this.name = category.name();
         this.description = category.description();
         this.icon = category.icon();
-        this.unlockRequirement = category.unlockRequirement().orElse(null);
-        this.prerequisites = category.prerequisites();
+        this.unlockRequirements = category.unlockRequirements();
         this.sortOrder = category.sortOrder();
     }
 
@@ -62,27 +59,17 @@ public class ResearchCategoryBuilder {
     }
 
     public ResearchCategoryBuilder unlockRequirement(ResourceLocation unlockRequirement) {
-        this.unlockRequirement = unlockRequirement;
+        this.unlockRequirements.add(unlockRequirement);
         return this;
     }
 
-    public ResearchCategoryBuilder removeUnlockRequirement() {
-        this.unlockRequirement = null;
+    public ResearchCategoryBuilder unlockRequirement(List<ResourceLocation> unlockRequirement) {
+        this.unlockRequirements.addAll(unlockRequirement);
         return this;
     }
 
-    public ResearchCategoryBuilder addPrerequisite(ResourceLocation prerequisite) {
-        this.prerequisites.add(prerequisite);
-        return this;
-    }
-
-    public ResearchCategoryBuilder addPrerequisites(List<ResourceLocation> prerequisites) {
-        this.prerequisites.addAll(prerequisites);
-        return this;
-    }
-
-    public ResearchCategoryBuilder removePrerequisites(ResourceLocation toRemove) {
-        this.prerequisites.remove(toRemove);
+    public ResearchCategoryBuilder removeUnlockRequirement(ResourceLocation requirement) {
+        this.unlockRequirements.remove(requirement);
         return this;
     }
 
@@ -98,7 +85,7 @@ public class ResearchCategoryBuilder {
 
     @HideFromJS
     public ResearchCategory build() {
-        ResearchCategory category = new ResearchCategory(id, name, description, icon, Optional.ofNullable(unlockRequirement), prerequisites, sortOrder);
+        ResearchCategory category = new ResearchCategory(id, name, description, icon, List.copyOf(unlockRequirements), sortOrder);
 
         if (parentEvent != null) {
             parentEvent.registerCategory(id, this);

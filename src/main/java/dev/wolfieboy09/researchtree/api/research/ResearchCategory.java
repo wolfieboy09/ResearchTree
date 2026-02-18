@@ -16,8 +16,7 @@ public record ResearchCategory(
         Component name,
         Component description,
         ItemStack icon,
-        Optional<ResourceLocation> unlockRequirement,
-        List<ResourceLocation> prerequisites,
+        List<ResourceLocation> unlockRequirements,
         int sortOrder
 ) {
     public static final Codec<ResearchCategory> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -25,8 +24,7 @@ public record ResearchCategory(
             ComponentSerialization.CODEC.fieldOf("name").forGetter(ResearchCategory::name),
             ComponentSerialization.CODEC.optionalFieldOf("description", Component.empty()).forGetter(ResearchCategory::description),
             ItemStack.SINGLE_ITEM_CODEC.optionalFieldOf("icon", ItemStack.EMPTY).forGetter(ResearchCategory::icon),
-            ResourceLocation.CODEC.optionalFieldOf("unlock_requirement").forGetter(ResearchCategory::unlockRequirement),
-            ResourceLocation.CODEC.listOf().optionalFieldOf("prerequisites", List.of()).forGetter(ResearchCategory::prerequisites),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("unlock_requirement", List.of()).forGetter(ResearchCategory::unlockRequirements),
             Codec.INT.optionalFieldOf("sort_order", 0).forGetter(ResearchCategory::sortOrder)
     ).apply(instance, ResearchCategory::new));
 
@@ -37,7 +35,6 @@ public record ResearchCategory(
                 name,
                 Component.empty(),
                 ItemStack.EMPTY,
-                Optional.empty(),
                 List.of(),
                 0
         );
@@ -49,28 +46,21 @@ public record ResearchCategory(
                 name,
                 Component.empty(),
                 icon,
-                Optional.empty(),
                 List.of(),
                 0
         );
     }
 
     public boolean isLocked(PlayerResearchDataAccessor playerData) {
-        if (unlockRequirement.isPresent() && !playerData.isCompleted(unlockRequirement.get())) {
-            return true;
-        }
-
-        for (ResourceLocation prereq : prerequisites) {
-            if (!playerData.isCategoryUnlocked(prereq)) {
+        for (ResourceLocation req : unlockRequirements) {
+            if (!playerData.isCompleted(req)) {
                 return true;
             }
         }
-
         return false;
     }
 
     public interface PlayerResearchDataAccessor {
         boolean isCompleted(ResourceLocation researchId);
-        boolean isCategoryUnlocked(ResourceLocation categoryId);
     }
 }

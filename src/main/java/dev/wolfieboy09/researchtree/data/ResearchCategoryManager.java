@@ -80,8 +80,7 @@ public final class ResearchCategoryManager extends SimplePreparableReloadListene
                                 category.name(),
                                 category.description(),
                                 category.icon(),
-                                category.unlockRequirement(),
-                                category.prerequisites(),
+                                category.unlockRequirements(),
                                 category.sortOrder()
                         );
                         loaded.put(id, correctedCategory);

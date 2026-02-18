@@ -56,9 +56,10 @@ public class PlayerResearchData implements ResearchCategory.PlayerResearchDataAc
 
     private void checkCategoryUnlocks(ResourceLocation completedResearchId, @Nullable Player player) {
         for (var category : ResearchCategoryManager.getAllCategories().values()) {
-            if (category.unlockRequirement().isPresent() &&
-                    category.unlockRequirement().get().equals(completedResearchId)) {
-                unlockCategory(category.id(), player);
+            if (category.unlockRequirements().contains(completedResearchId)) {
+                if (!category.isLocked(this)) {
+                    unlockCategory(category.id(), player);
+                }
             }
         }
     }
@@ -74,11 +75,6 @@ public class PlayerResearchData implements ResearchCategory.PlayerResearchDataAc
         }
     }
 
-    @Override
-    public boolean isCategoryUnlocked(ResourceLocation categoryId) {
-        return unlockedCategories.contains(categoryId);
-    }
-
     public Set<ResourceLocation> getUnlockedCategories() {
         return Collections.unmodifiableSet(unlockedCategories);
     }
@@ -87,7 +83,7 @@ public class PlayerResearchData implements ResearchCategory.PlayerResearchDataAc
         ResearchCategory category = ResearchCategoryManager.getCategory(categoryId);
         if (category == null) return false;
 
-        if (category.unlockRequirement().isEmpty() && category.prerequisites().isEmpty()) {
+        if (category.unlockRequirements().isEmpty()) {
             return true;
         }
 
