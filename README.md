@@ -22,7 +22,7 @@ If you would like to port it to (any other mod-loader than Neoforge), feel free 
 **Yes!**
 
 
-Also, because apparently I needed this section:
+Also, because apparently I needed this section: <br>
 [![Hosted By: Cloudsmith](https://img.shields.io/badge/OSS%20hosting%20by-cloudsmith-blue?logo=cloudsmith&style=for-the-badge)](https://cloudsmith.com)
 
 Package repository hosting is graciously provided by  [Cloudsmith](https://cloudsmith.com).
