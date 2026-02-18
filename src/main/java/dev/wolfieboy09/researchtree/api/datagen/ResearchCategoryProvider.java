@@ -117,7 +117,7 @@ public abstract class ResearchCategoryProvider implements DataProvider {
             return this;
         }
 
-        public Builder prerequisite(List<ResourceLocation> researchIds) {
+        public Builder unlockRequirement(List<ResourceLocation> researchIds) {
             this.unlockRequirements.addAll(researchIds);
             return this;
         }
