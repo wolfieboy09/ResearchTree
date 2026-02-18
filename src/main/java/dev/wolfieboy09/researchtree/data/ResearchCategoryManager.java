@@ -28,6 +28,10 @@ public final class ResearchCategoryManager extends SimplePreparableReloadListene
     private static final Logger LOGGER = LogUtils.getLogger();
     private static volatile Map<ResourceLocation, ResearchCategory> CATEGORIES = Map.of();
 
+    private static final Comparator<ResearchCategory> CATEGORY_ORDER =
+            Comparator.comparingInt(ResearchCategory::sortOrder)
+                    .thenComparing(cat -> cat.name().getString());
+
     @Override
     protected Map<ResourceLocation, JsonObject> prepare(ResourceManager resourceManager, ProfilerFiller profiler) {
         Map<ResourceLocation, JsonObject> jsons = new HashMap<>();
@@ -108,16 +112,18 @@ public final class ResearchCategoryManager extends SimplePreparableReloadListene
 
     public static @Unmodifiable List<ResearchCategory> getSortedCategories() {
         return CATEGORIES.values().stream()
-                .sorted(Comparator.comparingInt(ResearchCategory::sortOrder))
+                .sorted(CATEGORY_ORDER)
                 .toList();
     }
 
     public static @Unmodifiable List<ResearchCategory> getUnlockedCategories(ResearchCategory.PlayerResearchDataAccessor playerData) {
         return CATEGORIES.values().stream()
                 .filter(cat -> !cat.isLocked(playerData))
-                .sorted(Comparator.comparingInt(ResearchCategory::sortOrder))
+                .sorted(CATEGORY_ORDER)
                 .toList();
     }
+
+
 
     public static boolean hasCategory(ResourceLocation id) {
         return CATEGORIES.containsKey(id);

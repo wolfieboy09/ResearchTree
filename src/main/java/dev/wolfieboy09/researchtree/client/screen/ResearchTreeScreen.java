@@ -25,6 +25,7 @@ import org.lwjgl.glfw.GLFW;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
@@ -86,14 +87,12 @@ public class ResearchTreeScreen extends Screen {
         categoryButtons.clear();
 
         List<ResearchCategory> unlockedCategories = ResearchCategoryManager.getUnlockedCategories(data);
-        List<ResearchCategory> lockedCategories = new ArrayList<>();
-
-        for (var entry : ResearchCategoryManager.getAllCategories().entrySet()) {
-            ResearchCategory category = entry.getValue();
-            if (category.isLocked(data)) {
-                lockedCategories.add(category);
-            }
-        }
+        List<ResearchCategory> lockedCategories = ResearchCategoryManager.getAllCategories().values()
+                .stream()
+                .filter(category -> category.isLocked(data))
+                .sorted(Comparator.comparingInt(ResearchCategory::sortOrder)
+                        .thenComparing(cat -> cat.name().getString()))
+                .toList();
 
         int totalButtonCount = unlockedCategories.size() + lockedCategories.size();
         int visibleAreaHeight = height - CATEGORY_HEADER_HEIGHT - PADDING;
@@ -209,13 +208,13 @@ public class ResearchTreeScreen extends Screen {
         guiGraphics.disableScissor();
 
         List<ResearchCategory> unlockedCategories = ResearchCategoryManager.getUnlockedCategories(data);
-        List<ResearchCategory> lockedCategories = new ArrayList<>();
-        for (var entry : ResearchCategoryManager.getAllCategories().entrySet()) {
-            ResearchCategory category = entry.getValue();
-            if (category.isLocked(data)) {
-                lockedCategories.add(category);
-            }
-        }
+        List<ResearchCategory> lockedCategories = ResearchCategoryManager.getAllCategories().values()
+                .stream()
+                .filter(category -> category.isLocked(data))
+                .sorted(Comparator.comparingInt(ResearchCategory::sortOrder)
+                        .thenComparing(cat -> cat.name().getString()))
+                .toList();
+
         int totalButtonCount = unlockedCategories.size() + lockedCategories.size();
         int visibleAreaHeight = height - CATEGORY_HEADER_HEIGHT - PADDING;
         int totalContentHeight = totalButtonCount * (CATEGORY_BUTTON_HEIGHT + CATEGORY_BUTTON_SPACING);
@@ -377,13 +376,13 @@ public class ResearchTreeScreen extends Screen {
 
         if (mouseX < CATEGORY_PANEL_WIDTH) {
             List<ResearchCategory> unlockedCategories = ResearchCategoryManager.getUnlockedCategories(data);
-            List<ResearchCategory> lockedCategories = new ArrayList<>();
-            for (var entry : ResearchCategoryManager.getAllCategories().entrySet()) {
-                ResearchCategory category = entry.getValue();
-                if (category.isLocked(data)) {
-                    lockedCategories.add(category);
-                }
-            }
+            List<ResearchCategory> lockedCategories = ResearchCategoryManager.getAllCategories().values()
+                    .stream()
+                    .filter(category -> category.isLocked(data))
+                    .sorted(Comparator.comparingInt(ResearchCategory::sortOrder)
+                            .thenComparing(cat -> cat.name().getString()))
+                    .toList();
+
             int totalButtonCount = unlockedCategories.size() + lockedCategories.size();
             int visibleAreaHeight = height - CATEGORY_HEADER_HEIGHT - PADDING;
             int totalContentHeight = totalButtonCount * (CATEGORY_BUTTON_HEIGHT + CATEGORY_BUTTON_SPACING);
