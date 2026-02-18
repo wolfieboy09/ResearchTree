@@ -10,6 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
@@ -102,6 +103,10 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         public Builder icon(ItemStack icon) {
             this.icon = icon;
             return this;
+        }
+
+        public Builder icon(ItemLike icon) {
+            return icon(new ItemStack(icon));
         }
 
         public Builder unlockRequirement(ResourceLocation researchId) {
