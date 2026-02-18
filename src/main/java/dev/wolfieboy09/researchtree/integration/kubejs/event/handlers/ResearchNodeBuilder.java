@@ -4,7 +4,6 @@ import dev.latvian.mods.kubejs.error.KubeRuntimeException;
 import dev.latvian.mods.kubejs.util.TickDuration;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.researchtree.api.RTUtil;
-import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.api.research.ResearchRequirement;
 import dev.wolfieboy09.researchtree.api.research.ResearchReward;
