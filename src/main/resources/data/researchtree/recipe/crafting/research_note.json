@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "I": {
+     "item": "minecraft:ink_sac"
+    },
+    "S": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "SPS",
+    "PIP",
+    "SPS"
+  ],
+  "result": {
+    "id": "researchtree:research_note"
+  }
+}

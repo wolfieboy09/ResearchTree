@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "minecraft:slabs"
+    },
+    "B": {
+      "item": "minecraft:bookshelf"
+    },
+    "N": {
+      "item": "researchtree:research_note"
+    }
+  },
+  "pattern": [
+    "N N",
+    "SSS",
+    "PBP"
+  ],
+  "result": {
+    "id": "researchtree:research_table"
+  }
+}
