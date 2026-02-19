@@ -15,6 +15,9 @@
 
   "toast.researchtree.research_completed": "Research Completed",
 
+  "item.researchtree.research_note": "Research Note",
+  "block.researchtree.research_table": "Research Table",
+
   "gui.researchtree.close": "Close",
   "gui.researchtree.start_research": "Start Research",
   "gui.researchtree.status.completed": "Research Completed",
