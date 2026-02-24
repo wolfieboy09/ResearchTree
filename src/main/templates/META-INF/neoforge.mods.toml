@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
-#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
+issueTrackerURL="https://github.com/wolfieboy09/ResearchTree/issues"
 
 [[mods]]
 modId="researchtree"
@@ -9,7 +9,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 #updateJSONURL="https://change.me.example.invalid/updates.json"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
-#logoFile="examplemod.png"
+logoFile="icon.png"
 #credits=""
 authors="${mod_authors}"
 description='''${mod_description}'''
@@ -24,9 +24,16 @@ config="researchtree.mixins.json"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.researchtree]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.researchtree]]
+    modId="kubejs"
+    type="optional"
+    versionRange="[${kubejs_version},)"
     ordering="NONE"
     side="BOTH"
