@@ -89,7 +89,7 @@ configurations {
 
 dependencies {
     compileOnly("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
-    runtimeOnly("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    localRuntime("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
     interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
 }
 
