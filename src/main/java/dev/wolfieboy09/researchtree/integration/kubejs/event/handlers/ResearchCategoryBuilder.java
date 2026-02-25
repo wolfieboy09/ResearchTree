@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
@@ -17,7 +18,7 @@ public class ResearchCategoryBuilder {
     private transient Component name;
     private transient Component description;
     private transient ItemStack icon;
-    private transient List<ResourceLocation> unlockRequirements;
+    private transient List<ResourceLocation> unlockRequirements = new ArrayList<>();
     private transient int sortOrder;
 
     private ResearchCategoryModificationJS parentEvent = null;
