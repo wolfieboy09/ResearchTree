@@ -23,7 +23,7 @@ public class ResearchToast implements Toast {
     private long firstDrawTime;
     private boolean changed;
 
-    public static final ResourceLocation TOAST_TEXTURE = ResearchTreeMod.byId("toast/research");
+    public static final ResourceLocation TOAST_TEXTURE = ResearchTreeMod.byId("toast/research_completed");
 
     public ResearchToast(Component title, Component description, ItemStack icon) {
         this.title = title;
@@ -40,8 +40,8 @@ public class ResearchToast implements Toast {
 
         guiGraphics.blitSprite(TOAST_TEXTURE, 0, 0, this.width(), this.height());
 
-        guiGraphics.drawString(toastComponent.getMinecraft().font, title, 30, 7, 0xFF500050, false);
-        guiGraphics.drawString(toastComponent.getMinecraft().font, description, 30, 18, 0xFF000000, false);
+        guiGraphics.drawString(toastComponent.getMinecraft().font, title, 30, 7, 0xFF700070, false);
+        guiGraphics.drawString(toastComponent.getMinecraft().font, description, 30, 18, 0xFFFFFFFF, false);
 
         guiGraphics.renderFakeItem(icon, 8, 8);
 

@@ -10,7 +10,7 @@ displayName="${mod_name}"
 updateJSONURL="https://raw.githubusercontent.com/wolfieboy09/ResearchTree/refs/heads/master/updates.json"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
 logoFile="icon.png"
-#credits=""
+credits="Burack and startraveler for textures"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
