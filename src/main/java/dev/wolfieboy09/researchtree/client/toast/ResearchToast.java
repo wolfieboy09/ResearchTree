@@ -40,7 +40,7 @@ public class ResearchToast implements Toast {
 
         guiGraphics.blitSprite(TOAST_TEXTURE, 0, 0, this.width(), this.height());
 
-        guiGraphics.drawString(toastComponent.getMinecraft().font, title, 30, 7, 0xFF700070, false);
+        guiGraphics.drawString(toastComponent.getMinecraft().font, title, 30, 7, 0xFFC401C4, false);
         guiGraphics.drawString(toastComponent.getMinecraft().font, description, 30, 18, 0xFFFFFFFF, false);
 
         guiGraphics.renderFakeItem(icon, 8, 8);
