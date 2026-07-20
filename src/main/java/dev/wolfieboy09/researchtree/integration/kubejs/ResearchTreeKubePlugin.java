@@ -6,6 +6,7 @@ import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.BuilderTypeRegistry;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
+import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.integration.kubejs.event.RTEvents;
 import dev.wolfieboy09.researchtree.integration.kubejs.registry.RequirementTypeBuilder;
 import dev.wolfieboy09.researchtree.integration.kubejs.registry.RewardTypeBuilder;
@@ -45,6 +46,14 @@ public class ResearchTreeKubePlugin implements KubeJSPlugin {
 
     @Override
     public void registerClasses(ClassFilter filter) {
-        filter.deny("dev.wolfieboy09.researchtree.integration.kubejs.registry.no_touchies");
+        filter.deny(classPath("integration.kubejs.registry.no_touchies"));
+        filter.allow(classPath("api.research"));
+        filter.allow(classPath("api.wrapper"));
+        filter.allow(RTUtil.class);
+        filter.allow(classPath("core"));
+    }
+
+    private static String classPath(String path) {
+        return "dev.wolfieboy09.researchtree." + path;
     }
 }
