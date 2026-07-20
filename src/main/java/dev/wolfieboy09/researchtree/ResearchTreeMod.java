@@ -87,11 +87,15 @@ public class ResearchTreeMod {
                 UpdateResearchProgress.STREAM_CODEC,
                 UpdateResearchProgress::handleClient
         );
-
         registrar.playToClient(
                 ResearchStartedPacket.TYPE,
                 ResearchStartedPacket.STREAM_CODEC,
                 ResearchStartedPacket::handleClient
+        );
+        registrar.playToClient(
+                OpenResearchScreenPacket.TYPE,
+                OpenResearchScreenPacket.STREAM_CODEC,
+                OpenResearchScreenPacket::handleClient
         );
     }
 

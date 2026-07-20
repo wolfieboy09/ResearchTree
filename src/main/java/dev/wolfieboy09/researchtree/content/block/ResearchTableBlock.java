@@ -3,6 +3,7 @@ package dev.wolfieboy09.researchtree.content.block;
 import com.mojang.serialization.MapCodec;
 import dev.wolfieboy09.researchtree.content.blockentity.ResearchTableBlockEntity;
 import dev.wolfieboy09.researchtree.data.PlayerResearchData;
+import dev.wolfieboy09.researchtree.network.OpenResearchScreenPacket;
 import dev.wolfieboy09.researchtree.network.SyncResearchDataPacket;
 import dev.wolfieboy09.researchtree.registries.RTAttachments;
 import dev.wolfieboy09.researchtree.registries.RTBlockEntities;
@@ -10,6 +11,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,5 +113,16 @@ public class ResearchTableBlock extends BaseEntityBlock {
     @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            if (level.getBlockEntity(pos) instanceof ResearchTableBlockEntity) {
+                PacketDistributor.sendToPlayer(serverPlayer, new OpenResearchScreenPacket());
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 }
