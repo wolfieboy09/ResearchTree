@@ -96,7 +96,7 @@ public class ResearchTreeScreen extends Screen {
         int visibleAreaHeight = height - CATEGORY_HEADER_HEIGHT - PADDING;
         int totalContentHeight = totalButtonCount * (CATEGORY_BUTTON_HEIGHT + CATEGORY_BUTTON_SPACING);
         int maxScroll = Math.max(0, totalContentHeight - visibleAreaHeight);
-        categoryScrollOffset = Math.max(0, Math.min(categoryScrollOffset, maxScroll));
+        categoryScrollOffset = Math.clamp(categoryScrollOffset, 0, maxScroll);
 
         int yPos = PADDING + CATEGORY_HEADER_HEIGHT - categoryScrollOffset;
 
@@ -386,7 +386,7 @@ public class ResearchTreeScreen extends Screen {
             int totalContentHeight = totalButtonCount * (CATEGORY_BUTTON_HEIGHT + CATEGORY_BUTTON_SPACING);
             int maxScroll = Math.max(0, totalContentHeight - visibleAreaHeight);
 
-            categoryScrollOffset = Math.max(0, Math.min(maxScroll, categoryScrollOffset - (int) (scrollY * 10)));
+            categoryScrollOffset = Math.clamp(categoryScrollOffset - (int) (scrollY * 10), 0, maxScroll);
             buildCategoryButtons();
             return true;
         }
