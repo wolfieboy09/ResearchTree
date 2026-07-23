@@ -16,7 +16,9 @@ public record ResearchCategory(
         Component description,
         ItemStack icon,
         List<ResourceLocation> unlockRequirements,
-        int sortOrder
+        int sortOrder,
+        boolean autoLayout,
+        TreeLayoutDirection layoutDirection
 ) {
     public static final Codec<ResearchCategory> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("id", ResearchTreeMod.byId("placeholder")).forGetter(ResearchCategory::id),
@@ -24,7 +26,11 @@ public record ResearchCategory(
             ComponentSerialization.CODEC.optionalFieldOf("description", Component.empty()).forGetter(ResearchCategory::description),
             ItemStack.SINGLE_ITEM_CODEC.optionalFieldOf("icon", ItemStack.EMPTY).forGetter(ResearchCategory::icon),
             ResourceLocation.CODEC.listOf().optionalFieldOf("unlock_requirement", List.of()).forGetter(ResearchCategory::unlockRequirements),
-            Codec.INT.optionalFieldOf("sort_order", 0).forGetter(ResearchCategory::sortOrder)
+            Codec.INT.optionalFieldOf("sort_order", 0).forGetter(ResearchCategory::sortOrder),
+            // When true (default), node positions are computed automatically from the prerequisite graph
+            // and any "pos" set on individual nodes is ignored. Set too false to keep hand-placed GridPos layout.
+            Codec.BOOL.optionalFieldOf("auto_layout", true).forGetter(ResearchCategory::autoLayout),
+            TreeLayoutDirection.CODEC.optionalFieldOf("layout_direction", TreeLayoutDirection.TOP_DOWN).forGetter(ResearchCategory::layoutDirection)
     ).apply(instance, ResearchCategory::new));
 
 
@@ -35,7 +41,9 @@ public record ResearchCategory(
                 Component.empty(),
                 ItemStack.EMPTY,
                 List.of(),
-                0
+                0,
+                true,
+                TreeLayoutDirection.TOP_DOWN
         );
     }
 
@@ -46,7 +54,9 @@ public record ResearchCategory(
                 Component.empty(),
                 icon,
                 List.of(),
-                0
+                0,
+                true,
+                TreeLayoutDirection.TOP_DOWN
         );
     }
 

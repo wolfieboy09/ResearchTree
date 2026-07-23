@@ -4,6 +4,10 @@ import dev.wolfieboy09.researchtree.ResearchTreeMod;
 import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
+import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
+import dev.wolfieboy09.researchtree.api.wrapper.GridPosition;
+import dev.wolfieboy09.researchtree.client.screen.layout.ResearchTreeLayoutEngine;
+import dev.wolfieboy09.researchtree.client.screen.layout.TreeNodePosition;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchDetailsPanel;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchNodeButton;
 import dev.wolfieboy09.researchtree.data.PlayerResearchData;
@@ -24,7 +28,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ParametersAreNonnullByDefault
 public class ResearchTreeScreen extends Screen {
@@ -51,6 +57,10 @@ public class ResearchTreeScreen extends Screen {
 
     private static final int GRID_SIZE = 64;
 
+    // Cached auto layout results, keyed by category id ("uncategorized" bucket included). Cleared whenever
+    // nodes/categories are reloaded so datapack/KubeJS changes are picked back up.
+    private final Map<ResourceLocation, Map<ResourceLocation, TreeNodePosition>> layoutCache = new HashMap<>();
+
     public ResearchTreeScreen() {
         super(Component.translatable("screen.researchtree.title"));
     }
@@ -62,6 +72,7 @@ public class ResearchTreeScreen extends Screen {
         if (minecraft == null || minecraft.player == null) return;
         data = minecraft.player.getData(RTAttachments.RESEARCH_DATA);
 
+        layoutCache.clear();
         buildCategoryButtons();
 
         if (selectedCategoryId == null && !categoryButtons.isEmpty()) {
@@ -143,13 +154,35 @@ public class ResearchTreeScreen extends Screen {
                         node.category().isEmpty()
                                 ? selectedCategoryId.equals(ResearchTreeMod.byId("uncategorized"))
                                 : ResearchCategoryManager.hasCategory(node.category().get())).toList();
+
+        ResearchCategory category = ResearchCategoryManager.getCategory(selectedCategoryId);
+        boolean useAutoLayout = category == null || category.autoLayout();
+
+        Map<ResourceLocation, TreeNodePosition> positions = useAutoLayout
+                ? layoutCache.computeIfAbsent(selectedCategoryId, id ->
+                        ResearchTreeLayoutEngine.layout(nodes, category != null ? category.layoutDirection() : TreeLayoutDirection.TOP_DOWN))
+                : Map.of();
+
         for (ResearchNode node : nodes) {
             if (node.hidden() && !shouldShowHiddenNode(node)) {
                 continue;
             }
 
-            int x = CATEGORY_PANEL_WIDTH + PADDING + (node.gridPos().x() * GRID_SIZE) + (int) scrollX;
-            int y = PADDING + 30 + (node.gridPos().y() * GRID_SIZE) + (int) scrollY;
+            double gridX;
+            double gridY;
+
+            if (useAutoLayout) {
+                TreeNodePosition pos = positions.get(node.id());
+                gridX = pos != null ? pos.x() : 0;
+                gridY = pos != null ? pos.y() : 0;
+            } else {
+                GridPosition manualPos = node.gridPos().orElse(new GridPosition(0, 0));
+                gridX = manualPos.x();
+                gridY = manualPos.y();
+            }
+
+            int x = CATEGORY_PANEL_WIDTH + PADDING + (int) Math.round(gridX * GRID_SIZE) + (int) scrollX;
+            int y = PADDING + 30 + (int) Math.round(gridY * GRID_SIZE) + (int) scrollY;
 
             ResearchNodeButton button = new ResearchNodeButton(
                     x, y, 32, 32,
@@ -185,6 +218,7 @@ public class ResearchTreeScreen extends Screen {
 
     @ApiStatus.Internal
     public void refreshNodesAndCategories() {
+        layoutCache.clear();
         buildCategoryButtons();
         loadNodesForCategory();
     }

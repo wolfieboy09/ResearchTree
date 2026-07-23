@@ -5,10 +5,8 @@ import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.integration.kubejs.event.RTEvents;
-import dev.wolfieboy09.researchtree.integration.kubejs.event.handlers.ResearchCategoryBuilder;
 import dev.wolfieboy09.researchtree.integration.kubejs.event.handlers.ResearchCategoryModificationJS;
 import dev.wolfieboy09.researchtree.integration.kubejs.event.handlers.ResearchModificationEventJS;
-import dev.wolfieboy09.researchtree.integration.kubejs.event.handlers.ResearchNodeBuilder;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
@@ -27,9 +25,8 @@ public class KubeJSBridge {
             for (var entry : event.getNodesToModify().entrySet()) {
                 ResourceLocation id = entry.getKey();
 
-                ResearchNode existing = loaded.get(id);
-                if (existing != null) {
-                    entry.getValue().accept(new ResearchNodeBuilder(existing));
+                if (loaded.containsKey(id)) {
+                    loaded.put(id, entry.getValue().build());
                 }
             }
 
@@ -53,9 +50,9 @@ public class KubeJSBridge {
 
             for (var entry : event.getCategoriesToModify().entrySet()) {
                 ResourceLocation id = entry.getKey();
-                ResearchCategory existing = loaded.get(id);
-                if (existing != null) {
-                    entry.getValue().accept(new ResearchCategoryBuilder(existing));
+
+                if (loaded.containsKey(id)) {
+                    loaded.put(id, entry.getValue().build());
                 }
             }
 

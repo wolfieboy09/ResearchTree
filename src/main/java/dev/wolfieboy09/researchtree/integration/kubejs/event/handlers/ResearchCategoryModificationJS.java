@@ -11,11 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class ResearchCategoryModificationJS implements KubeEvent {
     private final transient Map<ResourceLocation, ResearchCategoryBuilder> categoriesToAdd = new HashMap<>();
-    private final transient Map<ResourceLocation, Consumer<ResearchCategoryBuilder>> categoriesToModify = new HashMap<>();
+    private final transient Map<ResourceLocation, ResearchCategoryBuilder> categoriesToModify = new HashMap<>();
 
     public ResearchCategoryBuilder create(@NotNull KubeResourceLocation id) {
         ResearchCategoryBuilder builder = new ResearchCategoryBuilder(id.wrapped());
@@ -30,7 +29,7 @@ public class ResearchCategoryModificationJS implements KubeEvent {
         }
 
         ResearchCategoryBuilder builder = new ResearchCategoryBuilder(existing);
-        categoriesToModify.put(id, b -> {});
+        categoriesToModify.put(id, builder);
         return builder;
     }
 
@@ -49,7 +48,7 @@ public class ResearchCategoryModificationJS implements KubeEvent {
     }
 
     @HideFromJS
-    public Map<ResourceLocation, Consumer<ResearchCategoryBuilder>> getCategoriesToModify() {
+    public Map<ResourceLocation, ResearchCategoryBuilder> getCategoriesToModify() {
         return categoriesToModify;
     }
 

@@ -91,7 +91,9 @@ public abstract class ResearchNodeProvider implements DataProvider {
         private final List<ResourceLocation> prerequisites = new ArrayList<>();
         private final List<ResearchRequirement<?>> requirements = new ArrayList<>();
         private final List<ResearchReward> rewards = new ArrayList<>();
-        private GridPosition gridPos = new GridPosition(0, 0);
+        // Only used when the node's category has auto_layout disabled; otherwise the tree layout is
+        // computed automatically from prerequisites and this pin is ignored.
+        private Optional<GridPosition> gridPos = Optional.empty();
         private Optional<ResourceLocation> category = Optional.empty();
         private boolean hidden = false;
         private ResearchProgressData progressData = ResearchProgressData.DEFAULT;
@@ -120,6 +122,11 @@ public abstract class ResearchNodeProvider implements DataProvider {
             return this;
         }
 
+        public Builder prerequisite(ResearchNodeProvider.Builder prereq) {
+            this.prerequisites.add(prereq.id);
+            return this;
+        }
+
         public Builder prerequisite(ResourceLocation prereq) {
             this.prerequisites.add(prereq);
             return this;
@@ -140,8 +147,9 @@ public abstract class ResearchNodeProvider implements DataProvider {
             return this;
         }
 
+        /** Manual position pin. Only takes effect on categories with auto_layout disabled. */
         public Builder pos(int x, int y) {
-            this.gridPos = new GridPosition(x, y);
+            this.gridPos = Optional.of(new GridPosition(x, y));
             return this;
         }
 

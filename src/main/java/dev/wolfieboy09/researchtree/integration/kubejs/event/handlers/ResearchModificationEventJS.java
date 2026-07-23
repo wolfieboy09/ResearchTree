@@ -12,12 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class ResearchModificationEventJS implements KubeEvent {
     private final transient Map<ResourceLocation, ResearchNodeBuilder> nodesToAdd = new HashMap<>();
     private final transient Set<ResourceLocation> nodesToRemove = new HashSet<>();
-    private final transient Map<ResourceLocation, Consumer<ResearchNodeBuilder>> nodesToModify = new HashMap<>();
+    private final transient Map<ResourceLocation, ResearchNodeBuilder> nodesToModify = new HashMap<>();
 
     public void remove(ResourceLocation id) {
         nodesToRemove.add(id);
@@ -30,8 +29,7 @@ public class ResearchModificationEventJS implements KubeEvent {
         }
 
         ResearchNodeBuilder builder = new ResearchNodeBuilder(existing);
-
-        nodesToModify.put(id, b -> {});
+        nodesToModify.put(id, builder);
         return builder;
     }
 
@@ -62,7 +60,7 @@ public class ResearchModificationEventJS implements KubeEvent {
     }
 
     @HideFromJS
-    public Map<ResourceLocation, Consumer<ResearchNodeBuilder>> getNodesToModify() {
+    public Map<ResourceLocation, ResearchNodeBuilder> getNodesToModify() {
         return nodesToModify;
     }
 

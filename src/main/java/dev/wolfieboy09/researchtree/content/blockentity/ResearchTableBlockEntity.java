@@ -39,6 +39,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @ParametersAreNonnullByDefault
@@ -46,6 +48,9 @@ public class ResearchTableBlockEntity extends BlockEntity {
     private UUID ownerUUID;
     private ResourceLocation currentResearch;
     private int researchTicks = 0;
+    // Tracks which requirements of the current research were already satisfied as of the last tick,
+    // so RequirementCompletedEvent only fires on the not-met -> met transition instead of every tick.
+    private final Set<ResearchRequirement<?>> metRequirements = new HashSet<>();
 
     private final IItemHandler itemHandler = new IItemHandler() {
         @Override
@@ -334,6 +339,7 @@ public class ResearchTableBlockEntity extends BlockEntity {
     public void setCurrentResearch(ResourceLocation researchId) {
         this.currentResearch = researchId;
         this.researchTicks = 0;
+        this.metRequirements.clear();
         setChanged();
     }
 
@@ -363,6 +369,7 @@ public class ResearchTableBlockEntity extends BlockEntity {
         if (data.isCompleted(blockEntity.currentResearch)) {
             blockEntity.currentResearch = null;
             blockEntity.researchTicks = 0;
+            blockEntity.metRequirements.clear();
             blockEntity.setChanged();
             return;
         }
@@ -370,6 +377,7 @@ public class ResearchTableBlockEntity extends BlockEntity {
         ResearchNode node = blockEntity.getResearchNode(blockEntity.currentResearch);
         if (node == null) {
             blockEntity.currentResearch = null;
+            blockEntity.metRequirements.clear();
             blockEntity.setChanged();
             return;
         }
@@ -381,10 +389,14 @@ public class ResearchTableBlockEntity extends BlockEntity {
         }
 
         for (ResearchRequirement<?> req : node.requirements()) {
-            boolean wasMetBefore = req.isMet(player);
+            boolean wasMetBefore = blockEntity.metRequirements.contains(req);
+            boolean isMetNow = req.isMet(player);
 
-            if (!wasMetBefore && req.isMet(player)) {
+            if (isMetNow && !wasMetBefore) {
+                blockEntity.metRequirements.add(req);
                 NeoForge.EVENT_BUS.post(new RequirementCompletedEvent(player, node, req));
+            } else if (!isMetNow && wasMetBefore) {
+                blockEntity.metRequirements.remove(req);
             }
         }
 
@@ -448,6 +460,7 @@ public class ResearchTableBlockEntity extends BlockEntity {
 
         currentResearch = null;
         researchTicks = 0;
+        metRequirements.clear();
         setChanged();
     }
 

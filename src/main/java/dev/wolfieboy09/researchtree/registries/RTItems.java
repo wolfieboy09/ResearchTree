@@ -1,7 +1,6 @@
 package dev.wolfieboy09.researchtree.registries;
 
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
-import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;

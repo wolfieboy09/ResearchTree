@@ -30,7 +30,9 @@ public class ResearchNodeBuilder {
     private transient final List<ResourceLocation> prerequisites;
     private transient final List<ResearchRequirement<?>> requirements;
     private transient final List<ResearchReward> rewards;
-    private transient GridPosition gridPos = new GridPosition(0, 0);
+    // Only used when the node's category has auto_layout disabled; otherwise the tree layout is
+    // computed automatically from prerequisites and this pin is ignored.
+    private transient Optional<GridPosition> gridPos = Optional.empty();
     @Nullable
     private transient ResourceLocation category = null;
     private transient boolean hidden = false;
@@ -59,6 +61,7 @@ public class ResearchNodeBuilder {
         this.requirements = List.copyOf(node.requirements());
         this.rewards = List.copyOf(node.rewards());
         this.category = node.category().orElse(null);
+        this.gridPos = node.gridPos();
         this.hidden = node.hidden();
         this.progressData = node.progressData();
     }
@@ -117,8 +120,9 @@ public class ResearchNodeBuilder {
         return this;
     }
 
+    /** Manual position pin. Only takes effect on categories with auto_layout disabled. */
     public ResearchNodeBuilder pos(int x, int y) {
-        this.gridPos = new GridPosition(x, y);
+        this.gridPos = Optional.of(new GridPosition(x, y));
         return this;
     }
 

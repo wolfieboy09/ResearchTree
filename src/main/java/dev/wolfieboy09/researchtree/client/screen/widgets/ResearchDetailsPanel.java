@@ -297,8 +297,8 @@ public class ResearchDetailsPanel {
             panelX += (int)(mouseX - lastMouseX);
             panelY += (int)(mouseY - lastMouseY);
 
-            panelX = Math.max(0, Math.min(Minecraft.getInstance().getWindow().getGuiScaledWidth() - panelWidth, panelX));
-            panelY = Math.max(0, Math.min(Minecraft.getInstance().getWindow().getGuiScaledHeight() - panelHeight, panelY));
+            panelX = Math.clamp(panelX, 0, Minecraft.getInstance().getWindow().getGuiScaledWidth() - panelWidth);
+            panelY = Math.clamp(panelY, 0, Minecraft.getInstance().getWindow().getGuiScaledHeight() - panelHeight);
 
             lastMouseX = mouseX;
             lastMouseY = mouseY;
@@ -314,7 +314,7 @@ public class ResearchDetailsPanel {
         if (isMouseOver(mouseX, mouseY)) {
             int contentAreaHeight = (panelHeight - 50) - PADDING;
             int maxScroll = Math.max(0, contentHeight - contentAreaHeight);
-            scrollOffset = Math.max(0, Math.min(maxScroll, scrollOffset - (int)(scrollY * 10)));
+            scrollOffset = Math.clamp(scrollOffset - (int) (scrollY * 10), 0, maxScroll);
             return true;
         }
         return false;

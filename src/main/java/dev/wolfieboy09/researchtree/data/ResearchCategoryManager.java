@@ -85,7 +85,9 @@ public final class ResearchCategoryManager extends SimplePreparableReloadListene
                                 category.description(),
                                 category.icon(),
                                 category.unlockRequirements(),
-                                category.sortOrder()
+                                category.sortOrder(),
+                                category.autoLayout(),
+                                category.layoutDirection()
                         );
                         loaded.put(id, correctedCategory);
                         LOGGER.debug("Loaded research category: {}", id);
@@ -98,7 +100,7 @@ public final class ResearchCategoryManager extends SimplePreparableReloadListene
 
         CATEGORIES = Map.copyOf(loaded);
         String label = CATEGORIES.size() == 1 ? "category" : "categories";
-        LOGGER.info("Successfully loaded {} research {}", label, CATEGORIES.size());
+        LOGGER.info("Successfully loaded {} research {}", CATEGORIES.size(), label);
     }
 
     public static @UnmodifiableView Map<ResourceLocation, ResearchCategory> getAllCategories() {

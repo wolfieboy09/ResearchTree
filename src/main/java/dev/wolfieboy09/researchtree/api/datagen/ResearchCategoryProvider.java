@@ -3,6 +3,7 @@ package dev.wolfieboy09.researchtree.api.datagen;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
+import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -78,8 +79,10 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         private Component name;
         private Component description = Component.empty();
         private ItemStack icon = ItemStack.EMPTY;
-        private final List<ResourceLocation> unlockRequirements = List.of();
+        private final List<ResourceLocation> unlockRequirements = new ArrayList<>();
         private int sortOrder = 0;
+        private boolean autoLayout = true;
+        private TreeLayoutDirection layoutDirection = TreeLayoutDirection.TOP_DOWN;
 
         private Builder(ResourceLocation id) {
             this.id = id;
@@ -126,9 +129,20 @@ public abstract class ResearchCategoryProvider implements DataProvider {
             return this;
         }
 
+        /** Disables the automatic tree layout for this category, restoring hand-placed GridPos positioning. */
+        public Builder manualLayout() {
+            this.autoLayout = false;
+            return this;
+        }
+
+        public Builder layoutDirection(TreeLayoutDirection direction) {
+            this.layoutDirection = direction;
+            return this;
+        }
+
         ResearchCategory build() {
             return new ResearchCategory(
-                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder
+                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, layoutDirection
             );
         }
     }

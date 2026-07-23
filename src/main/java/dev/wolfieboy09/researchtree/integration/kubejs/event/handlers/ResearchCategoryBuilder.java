@@ -2,6 +2,7 @@ package dev.wolfieboy09.researchtree.integration.kubejs.event.handlers;
 
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
+import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -20,6 +21,8 @@ public class ResearchCategoryBuilder {
     private transient ItemStack icon;
     private transient List<ResourceLocation> unlockRequirements = new ArrayList<>();
     private transient int sortOrder;
+    private transient boolean autoLayout = true;
+    private transient TreeLayoutDirection layoutDirection = TreeLayoutDirection.TOP_DOWN;
 
     private ResearchCategoryModificationJS parentEvent = null;
 
@@ -40,6 +43,8 @@ public class ResearchCategoryBuilder {
         this.icon = category.icon();
         this.unlockRequirements = category.unlockRequirements();
         this.sortOrder = category.sortOrder();
+        this.autoLayout = category.autoLayout();
+        this.layoutDirection = category.layoutDirection();
     }
 
     public ResearchCategoryBuilder name(Component name) {
@@ -77,6 +82,22 @@ public class ResearchCategoryBuilder {
         return this;
     }
 
+    /** Disables the automatic tree layout for this category, restoring hand-placed GridPos positioning. */
+    public ResearchCategoryBuilder manualLayout() {
+        this.autoLayout = false;
+        return this;
+    }
+
+    public ResearchCategoryBuilder autoLayout(boolean autoLayout) {
+        this.autoLayout = autoLayout;
+        return this;
+    }
+
+    public ResearchCategoryBuilder layoutDirection(TreeLayoutDirection direction) {
+        this.layoutDirection = direction;
+        return this;
+    }
+
     @HideFromJS
     public void setParentEvent(ResearchCategoryModificationJS event) {
         this.parentEvent = event;
@@ -84,7 +105,7 @@ public class ResearchCategoryBuilder {
 
     @HideFromJS
     public ResearchCategory build() {
-        ResearchCategory category = new ResearchCategory(id, name, description, icon, List.copyOf(unlockRequirements), sortOrder);
+        ResearchCategory category = new ResearchCategory(id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, layoutDirection);
 
         if (parentEvent != null) {
             parentEvent.registerCategory(id, this);

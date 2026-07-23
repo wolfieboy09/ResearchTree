@@ -21,7 +21,9 @@ public record ResearchNode(
         List<ResourceLocation> prerequisites,
         List<ResearchRequirement<?>> requirements,
         List<ResearchReward> rewards,
-        GridPosition gridPos,
+        // Manual pin. Only honored when the node's category has "auto_layout": false;
+        // otherwise position is computed by ResearchTreeLayoutEngine from the prerequisite graph.
+        Optional<GridPosition> gridPos,
         Optional<ResourceLocation> category,
         boolean hidden,
         ResearchProgressData progressData
@@ -37,7 +39,7 @@ public record ResearchNode(
             ResourceLocation.CODEC.listOf().optionalFieldOf("prerequisites", List.of()).forGetter(ResearchNode::prerequisites),
             ResearchRequirement.DISPATCH_CODEC.listOf().optionalFieldOf("requirements", List.of()).forGetter(ResearchNode::requirements),
             ResearchReward.DISPATCH_CODEC.listOf().optionalFieldOf("rewards", List.of()).forGetter(ResearchNode::rewards),
-            GridPosition.CODEC.fieldOf("pos").forGetter(ResearchNode::gridPos),
+            GridPosition.CODEC.optionalFieldOf("pos").forGetter(ResearchNode::gridPos),
             ResourceLocation.CODEC.optionalFieldOf("category").forGetter(ResearchNode::category),
             Codec.BOOL.optionalFieldOf("hidden", false).forGetter(ResearchNode::hidden),
             ResearchProgressData.CODEC.optionalFieldOf("progress_data", ResearchProgressData.DEFAULT).forGetter(ResearchNode::progressData)
