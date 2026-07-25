@@ -35,9 +35,9 @@
 		},
 		{
 			"name": "stand",
-			"from": [7, 1, 8],
-			"to": [9, 14, 10],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 8]},
+			"from": [7, 1, 7],
+			"to": [9, 14, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 7]},
 			"faces": {
 				"north": {"uv": [8, 1.5, 8.5, 4.75], "texture": "#0"},
 				"east": {"uv": [4, 8, 4.5, 11.25], "texture": "#0"},
@@ -105,9 +105,9 @@
 		},
 		{
 			"name": "support",
-			"from": [5, 1, 14],
-			"to": [7, 7, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 14]},
+			"from": [7, 1, 14],
+			"to": [9, 7, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 1, 14]},
 			"faces": {
 				"north": {"uv": [9, 5.5, 9.5, 7], "texture": "#0"},
 				"east": {"uv": [9, 4, 9.5, 5.5], "texture": "#0"},
@@ -119,9 +119,9 @@
 		},
 		{
 			"name": "head",
-			"from": [4, 7, 14],
-			"to": [8, 11, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7, 7, 14]},
+			"from": [6, 7, 14],
+			"to": [10, 11, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 7, 14]},
 			"faces": {
 				"north": {"uv": [1, 8.5, 2, 9.5], "texture": "#0"},
 				"east": {"uv": [8.5, 9, 9, 10], "texture": "#0"},
@@ -151,23 +151,27 @@
 		{
 			"name": "side",
 			"origin": [0, 0, 0],
+			"scope": 0,
 			"color": 0,
 			"children": [
 				{
 					"name": "insertion",
 					"origin": [0, 0, 0],
+					"scope": 0,
 					"color": 0,
 					"children": [3, 4]
 				},
 				{
 					"name": "insertion",
 					"origin": [0, 0, 0],
+					"scope": 0,
 					"color": 0,
 					"children": [5, 6]
 				},
 				{
 					"name": "insertion",
 					"origin": [0, 0, 0],
+					"scope": 0,
 					"color": 0,
 					"children": [7, 8]
 				}
