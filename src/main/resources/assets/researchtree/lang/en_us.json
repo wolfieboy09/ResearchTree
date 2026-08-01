@@ -18,6 +18,8 @@
   "item.researchtree.research_note": "Research Note",
   "block.researchtree.research_table": "Research Table",
 
+  "config.researchtree.smoothScrollingEnabled": "Smooth Scrolling Enabled",
+
   "gui.researchtree.close": "Close",
   "gui.researchtree.start_research": "Start Research",
   "gui.researchtree.status.completed": "Research Completed",
