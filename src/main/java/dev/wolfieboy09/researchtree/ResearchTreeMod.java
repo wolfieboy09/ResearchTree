@@ -3,6 +3,7 @@ package dev.wolfieboy09.researchtree;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.researchtree.client.screen.ResearchTreeScreen;
+import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.data.ResearchCategoryManager;
 import dev.wolfieboy09.researchtree.data.ResearchNodeManager;
 import dev.wolfieboy09.researchtree.integration.kubejs.KubeEventListeners;
@@ -46,7 +47,7 @@ public class ResearchTreeMod {
         RTRewardTypes.REWARD_TYPES.register(modEventBus);
         RTCreativeMenu.REGISTER.register(modEventBus);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, RTClientConfig.SPEC);
 
         if (LoadingModList.get().getModFileById("kubejs") != null) {
             NeoForge.EVENT_BUS.addListener(KubeEventListeners::researchStarted);
