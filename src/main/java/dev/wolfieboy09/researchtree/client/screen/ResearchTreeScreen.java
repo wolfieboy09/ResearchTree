@@ -1,6 +1,7 @@
 package dev.wolfieboy09.researchtree.client.screen;
 
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
+import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
@@ -22,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -52,10 +54,23 @@ public class ResearchTreeScreen extends Screen {
     private double lastMouseX = 0;
     private double lastMouseY = 0;
 
+    private double zoom = 1.0;
+    private static final double MIN_ZOOM = 0.35;
+    private static final double MAX_ZOOM = 2.5;
+    private static final double ZOOM_STEP = 0.1;
+
+    private double targetScrollX = 0;
+    private double targetScrollY = 0;
+    private double targetZoom = 1.0;
+    private static final double SMOOTH_SCROLL_FACTOR = 0.35;
+    private static final double SMOOTH_SCROLL_EPSILON = 0.05;
+    private static final double SMOOTH_ZOOM_EPSILON = 0.002;
+
     private int categoryScrollOffset = 0;
     private static final int CATEGORY_HEADER_HEIGHT = 30;
 
     private static final int GRID_SIZE = 64;
+    private static final int NODE_SIZE = 32;
 
     // Cached auto layout results, keyed by category id ("uncategorized" bucket included). Cleared whenever
     // nodes/categories are reloaded so datapack/KubeJS changes are picked back up.
@@ -181,24 +196,64 @@ public class ResearchTreeScreen extends Screen {
                 gridY = manualPos.y();
             }
 
-            int x = CATEGORY_PANEL_WIDTH + PADDING + (int) Math.round(gridX * GRID_SIZE) + (int) scrollX;
-            int y = PADDING + 30 + (int) Math.round(gridY * GRID_SIZE) + (int) scrollY;
-
-            ResearchNodeButton button = new ResearchNodeButton(
-                    x, y, 32, 32,
-                    node.title(),
-                    btn -> openDetailsPanel(node),
-                    node,
-                    data
-            );
+            ResearchNodeButton button = getNodeButton(node, gridX, gridY);
 
             nodeButtons.add(button);
             this.addRenderableWidget(button);
         }
     }
 
+    private @NotNull ResearchNodeButton getNodeButton(ResearchNode node, double gridX, double gridY) {
+        double effectiveGridSize = GRID_SIZE * zoom;
+        int nodeSize = Math.max(6, (int) Math.round(NODE_SIZE * zoom));
+
+        int x = CATEGORY_PANEL_WIDTH + PADDING + (int) Math.round(gridX * effectiveGridSize) + (int) scrollX;
+        int y = PADDING + 30 + (int) Math.round(gridY * effectiveGridSize) + (int) scrollY;
+
+        return new ResearchNodeButton(
+                x, y, nodeSize, nodeSize,
+                node.title(),
+                btn -> openDetailsPanel(node),
+                node,
+                data
+        );
+    }
+
     private boolean shouldShowHiddenNode(ResearchNode node) {
         return node.prerequisites().stream().anyMatch(data::isCompleted);
+    }
+
+    /**
+     * Eases scrollX/scrollY/zoom towards their target values when smooth scrolling is enabled,
+     * or snaps straight to the target otherwise. Called once per rendered frame.
+     */
+    private void updateSmoothScrolling() {
+        boolean smooth = RTClientConfig.smoothScrollingEnabled.get();
+
+        double dX = targetScrollX - scrollX;
+        double dY = targetScrollY - scrollY;
+        double dZoom = targetZoom - zoom;
+
+        if (dX == 0 && dY == 0 && dZoom == 0) {
+            return;
+        }
+
+        boolean settled = !smooth
+                || (Math.abs(dX) < SMOOTH_SCROLL_EPSILON
+                        && Math.abs(dY) < SMOOTH_SCROLL_EPSILON
+                        && Math.abs(dZoom) < SMOOTH_ZOOM_EPSILON);
+
+        if (settled) {
+            scrollX = targetScrollX;
+            scrollY = targetScrollY;
+            zoom = targetZoom;
+        } else {
+            scrollX += dX * SMOOTH_SCROLL_FACTOR;
+            scrollY += dY * SMOOTH_SCROLL_FACTOR;
+            zoom += dZoom * SMOOTH_SCROLL_FACTOR;
+        }
+
+        loadNodesForCategory();
     }
 
     private void openDetailsPanel(ResearchNode node) {
@@ -225,6 +280,8 @@ public class ResearchTreeScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        updateSmoothScrolling();
+
         renderBackground(guiGraphics, mouseX, mouseY, partialTick);
 
         guiGraphics.fill(0, 0, CATEGORY_PANEL_WIDTH, height, 0xAA000000);
@@ -390,6 +447,9 @@ public class ResearchTreeScreen extends Screen {
             scrollX += deltaX;
             scrollY += deltaY;
 
+            targetScrollX = scrollX;
+            targetScrollY = scrollY;
+
             lastMouseX = mouseX;
             lastMouseY = mouseY;
 
@@ -422,6 +482,21 @@ public class ResearchTreeScreen extends Screen {
 
             categoryScrollOffset = Math.clamp(categoryScrollOffset - (int) (scrollY * 10), 0, maxScroll);
             buildCategoryButtons();
+            return true;
+        }
+
+        double oldTargetZoom = targetZoom;
+        double newTargetZoom = Math.clamp(targetZoom + scrollY * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
+
+        if (newTargetZoom != oldTargetZoom) {
+            double ratio = newTargetZoom / oldTargetZoom;
+            double baseX = CATEGORY_PANEL_WIDTH + PADDING;
+            double baseY = PADDING + 30;
+
+            targetScrollX = mouseX - baseX - (mouseX - baseX - targetScrollX) * ratio;
+            targetScrollY = mouseY - baseY - (mouseY - baseY - targetScrollY) * ratio;
+            targetZoom = newTargetZoom;
+
             return true;
         }
 

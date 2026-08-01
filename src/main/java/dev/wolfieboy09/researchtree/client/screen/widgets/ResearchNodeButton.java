@@ -22,6 +22,7 @@ import java.util.List;
 public class ResearchNodeButton extends Button {
     private final ResearchNode node;
     private final PlayerResearchData data;
+    private final boolean canStart;
     private float hoverScale = 0.0f;
     private float researchAnimationTicks = 0.0f;
     private boolean wasCompleted = false;
@@ -36,8 +37,9 @@ public class ResearchNodeButton extends Button {
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
         this.node = node;
         this.data = data;
+        this.canStart = canStart(node, data);
 
-        this.active = !data.isCompleted(node.id()) && canStart(node, data);
+        this.active = true;
 
         updateTooltip();
     }
@@ -134,11 +136,18 @@ public class ResearchNodeButton extends Button {
         int borderColor = getBorderColor();
         renderBorderWithProgress(guiGraphics, renderX, renderY, scaledWidth, scaledHeight, borderColor, progress);
 
-        // Render icon in the center
+        // Render icon in the center, scaled to fit the node (nodes shrink/grow when zooming the tree)
         ItemStack icon = node.icon();
-        int iconX = renderX + (scaledWidth - 16) / 2;
-        int iconY = renderY + (scaledHeight - 16) / 2;
-        guiGraphics.renderFakeItem(icon, iconX, iconY);
+        int iconSize = Math.max(4, Math.min(scaledWidth, scaledHeight) / 2);
+        float iconRenderScale = iconSize / 16.0f;
+        int iconCenterX = renderX + scaledWidth / 2;
+        int iconCenterY = renderY + scaledHeight / 2;
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(iconCenterX, iconCenterY, 0);
+        guiGraphics.pose().scale(iconRenderScale, iconRenderScale, 1.0f);
+        guiGraphics.renderFakeItem(icon, -8, -8);
+        guiGraphics.pose().popPose();
 
         guiGraphics.pose().popPose();
     }
@@ -148,7 +157,7 @@ public class ResearchNodeButton extends Button {
             return 0xFF00AA00; // Green for completed
         } else if (data.getProgress(node.id()) != null) {
             return 0xFFAAAA00; // Yellow for in progress
-        } else if (!active) {
+        } else if (!canStart) {
             return 0xFF3F3F3F; // Dark gray for locked
         } else {
             return 0xFF555555; // Grey for available
@@ -160,7 +169,7 @@ public class ResearchNodeButton extends Button {
             return 0xFFFFFFFF; // White when hovered
         } else if (data.isCompleted(node.id())) {
             return 0xFF00FF00; // Bright green for completed
-        } else if (!active) {
+        } else if (!canStart) {
             return 0xFF888888; // Light gray for locked
         } else {
             return 0xFFAAAAAA; // Medium gray for available
