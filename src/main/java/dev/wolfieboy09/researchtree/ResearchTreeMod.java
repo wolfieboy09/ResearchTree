@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.researchtree.client.screen.ResearchTreeScreen;
 import dev.wolfieboy09.researchtree.config.RTClientConfig;
+import dev.wolfieboy09.researchtree.data.PlayerResearchData;
 import dev.wolfieboy09.researchtree.data.ResearchCategoryManager;
 import dev.wolfieboy09.researchtree.data.ResearchNodeManager;
 import dev.wolfieboy09.researchtree.integration.kubejs.KubeEventListeners;
@@ -13,7 +14,10 @@ import dev.wolfieboy09.researchtree.network.*;
 import dev.wolfieboy09.researchtree.registries.*;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -26,6 +30,8 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
@@ -122,6 +128,16 @@ public class ResearchTreeMod {
     public static void onKeyInput(InputEvent.Key event) {
         if (openTreeScreen.consumeClick()) {
             Minecraft.getInstance().setScreen(new ResearchTreeScreen());
+        }
+    }
+
+    @SubscribeEvent
+    public static void checkPlayerTable(PlayerInteractEvent.RightClickBlock event) {
+        Player player = event.getEntity();
+        PlayerResearchData data = player.getData(RTAttachments.RESEARCH_DATA);
+        if (data.hasResearchTable() && !player.isCreative() || !player.isSpectator()) {
+            player.displayClientMessage(Component.translatable("message.researchtree.already_has_table"), true);
+            event.setCanceled(true);
         }
     }
 

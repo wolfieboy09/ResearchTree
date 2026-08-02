@@ -10,7 +10,6 @@ import dev.wolfieboy09.researchtree.registries.RTBlockEntities;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -89,11 +88,6 @@ public class ResearchTableBlock extends BaseEntityBlock {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (!level.isClientSide && placer instanceof ServerPlayer player) {
             PlayerResearchData data = player.getData(RTAttachments.RESEARCH_DATA);
-
-            if (data.hasResearchTable()) {
-                player.sendSystemMessage(Component.translatable("message.researchtree.already_has_table"));
-                return;
-            }
 
             if (level.getBlockEntity(pos) instanceof ResearchTableBlockEntity blockEntity) {
                 blockEntity.setOwner(player.getUUID());
