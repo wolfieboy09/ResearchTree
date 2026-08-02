@@ -12,6 +12,7 @@ import net.minecraft.world.item.Items;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 public class ResearchCategoryBuilder {
@@ -23,6 +24,7 @@ public class ResearchCategoryBuilder {
     private transient int sortOrder;
     private transient boolean autoLayout = true;
     private transient TreeLayoutDirection layoutDirection = TreeLayoutDirection.TOP_DOWN;
+    private transient Optional<Integer> maxActiveResearch = Optional.empty();
 
     private ResearchCategoryModificationJS parentEvent = null;
 
@@ -45,6 +47,7 @@ public class ResearchCategoryBuilder {
         this.sortOrder = category.sortOrder();
         this.autoLayout = category.autoLayout();
         this.layoutDirection = category.layoutDirection();
+        this.maxActiveResearch = category.maxActiveResearch();
     }
 
     public ResearchCategoryBuilder name(Component name) {
@@ -98,6 +101,16 @@ public class ResearchCategoryBuilder {
         return this;
     }
 
+    /**
+     * Overrides how many research nodes a player may have actively in-progress at once within
+     * this category. Pass 0 (or negative) to explicitly disable the per-category cap here,
+     * regardless of the configured default. Leave unset to fall back to the configured default.
+     */
+    public ResearchCategoryBuilder maxActiveResearch(int max) {
+        this.maxActiveResearch = Optional.of(max);
+        return this;
+    }
+
     @HideFromJS
     public void setParentEvent(ResearchCategoryModificationJS event) {
         this.parentEvent = event;
@@ -105,7 +118,10 @@ public class ResearchCategoryBuilder {
 
     @HideFromJS
     public ResearchCategory build() {
-        ResearchCategory category = new ResearchCategory(id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, layoutDirection);
+        ResearchCategory category = new ResearchCategory(
+                id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout,
+                layoutDirection, maxActiveResearch
+        );
 
         if (parentEvent != null) {
             parentEvent.registerCategory(id, this);

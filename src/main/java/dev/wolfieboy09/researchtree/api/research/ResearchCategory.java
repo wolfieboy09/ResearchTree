@@ -7,8 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import dev.wolfieboy09.researchtree.config.RTServerConfig;
 
 import java.util.List;
+import java.util.Optional;
 
 public record ResearchCategory(
         ResourceLocation id,
@@ -18,7 +20,10 @@ public record ResearchCategory(
         List<ResourceLocation> unlockRequirements,
         int sortOrder,
         boolean autoLayout,
-        TreeLayoutDirection layoutDirection
+        TreeLayoutDirection layoutDirection,
+        // Overrides Config.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH for this category specifically.
+        // Empty = use the configured default. <= 0 = no per-category cap for this category.
+        Optional<Integer> maxActiveResearch
 ) {
     public static final Codec<ResearchCategory> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.optionalFieldOf("id", ResearchTreeMod.byId("placeholder")).forGetter(ResearchCategory::id),
@@ -30,7 +35,8 @@ public record ResearchCategory(
             // When true (default), node positions are computed automatically from the prerequisite graph
             // and any "pos" set on individual nodes is ignored. Set too false to keep hand-placed GridPos layout.
             Codec.BOOL.optionalFieldOf("auto_layout", true).forGetter(ResearchCategory::autoLayout),
-            TreeLayoutDirection.CODEC.optionalFieldOf("layout_direction", TreeLayoutDirection.TOP_DOWN).forGetter(ResearchCategory::layoutDirection)
+            TreeLayoutDirection.CODEC.optionalFieldOf("layout_direction", TreeLayoutDirection.TOP_DOWN).forGetter(ResearchCategory::layoutDirection),
+            Codec.INT.optionalFieldOf("max_active_research").forGetter(ResearchCategory::maxActiveResearch)
     ).apply(instance, ResearchCategory::new));
 
 
@@ -43,7 +49,8 @@ public record ResearchCategory(
                 List.of(),
                 0,
                 true,
-                TreeLayoutDirection.TOP_DOWN
+                TreeLayoutDirection.TOP_DOWN,
+                Optional.empty()
         );
     }
 
@@ -56,8 +63,18 @@ public record ResearchCategory(
                 List.of(),
                 0,
                 true,
-                TreeLayoutDirection.TOP_DOWN
+                TreeLayoutDirection.TOP_DOWN,
+                Optional.empty()
         );
+    }
+
+    /**
+     * Resolves the effective max-active-research cap for this category:
+     * this category's own override if set, otherwise the configured default.
+     * A value &lt;= 0 means "no per-category cap" (only the global cap, if any, applies).
+     */
+    public int resolvedMaxActiveResearch() {
+        return maxActiveResearch.orElseGet(RTServerConfig.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH::get);
     }
 
     public boolean isLocked(PlayerResearchDataAccessor playerData) {

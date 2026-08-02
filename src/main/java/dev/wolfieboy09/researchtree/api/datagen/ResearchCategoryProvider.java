@@ -17,6 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
@@ -83,6 +84,7 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         private int sortOrder = 0;
         private boolean autoLayout = true;
         private TreeLayoutDirection layoutDirection = TreeLayoutDirection.TOP_DOWN;
+        private Optional<Integer> maxActiveResearch = Optional.empty();
 
         private Builder(ResourceLocation id) {
             this.id = id;
@@ -140,9 +142,21 @@ public abstract class ResearchCategoryProvider implements DataProvider {
             return this;
         }
 
+        /**
+         * Overrides how many research nodes a player may have actively in-progress at once
+         * within this specific category. Pass 0 (or negative) to explicitly disable the
+         * per-category cap for this category, regardless of the configured default.
+         * If never called, the category falls back to Config.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH.
+         */
+        public Builder maxActiveResearch(int max) {
+            this.maxActiveResearch = Optional.of(max);
+            return this;
+        }
+
         ResearchCategory build() {
             return new ResearchCategory(
-                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, layoutDirection
+                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout,
+                    layoutDirection, maxActiveResearch
             );
         }
     }

@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.researchtree.api.event.CategoryUnlockedEvent;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
+import dev.wolfieboy09.researchtree.api.research.ResearchNode;
+import dev.wolfieboy09.researchtree.config.RTServerConfig;
 import dev.wolfieboy09.researchtree.core.ResearchStatus;
 import dev.wolfieboy09.researchtree.core.ResearchTree;
 import net.minecraft.core.BlockPos;
@@ -106,8 +108,24 @@ public class PlayerResearchData implements ResearchCategory.PlayerResearchDataAc
         return ResearchStatus.LOCKED;
     }
 
+    /**
+     * @deprecated the {@link ResearchTree} parameter is no longer needed; nodes are resolved
+     * from the live {@link ResearchNodeManager} registry instead. Use {@link #canStartResearch(ResourceLocation)}.
+     */
+    @Deprecated
     public boolean canStartResearch(ResourceLocation researchId, @NotNull ResearchTree tree) {
-        var node = tree.getNode(researchId);
+        return canStartResearch(researchId);
+    }
+
+    /**
+     * Whether this player is allowed to start (or resume) research on the given node right now.
+     * This checks, in order: the node exists, its prerequisites are completed, it isn't already
+     * completed, and finally the configured active-research limits (global + per-category).
+     * A node that is already active for this player always passes the limit checks, since
+     * "starting" an already-active research is just a no-op resume.
+     */
+    public boolean canStartResearch(ResourceLocation researchId) {
+        ResearchNode node = ResearchNodeManager.getNode(researchId);
         if (node == null) return false;
 
         for (ResourceLocation prereq : node.prerequisites()) {
@@ -116,7 +134,46 @@ public class PlayerResearchData implements ResearchCategory.PlayerResearchDataAc
             }
         }
 
-        return !completedResearch.contains(researchId);
+        if (completedResearch.contains(researchId)) {
+            return false;
+        }
+
+        // Already active: allowed, this is just a resume, not a new slot being taken.
+        if (activeResearch.containsKey(researchId)) {
+            return true;
+        }
+
+        return hasFreeActiveResearchSlot(node);
+    }
+
+    /**
+     * Checks the global cap (Config.GLOBAL_MAX_ACTIVE_RESEARCH) and the resolved per-category
+     * cap for the given node's category against this player's current active research.
+     * A cap value <= 0 means "no limit" for that particular check.
+     */
+    private boolean hasFreeActiveResearchSlot(ResearchNode node) {
+        int globalMax = RTServerConfig.GLOBAL_MAX_ACTIVE_RESEARCH.get();
+        if (globalMax > 0 && activeResearch.size() >= globalMax) {
+            return false;
+        }
+
+        Optional<ResourceLocation> categoryId = node.category();
+        if (categoryId.isPresent()) {
+            ResearchCategory category = ResearchCategoryManager.getCategory(categoryId.get());
+            int categoryMax = category != null ? category.resolvedMaxActiveResearch() : RTServerConfig.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH.get();
+
+            if (categoryMax > 0) {
+                long activeInCategory = activeResearch.keySet().stream()
+                        .map(ResearchNodeManager::getNode)
+                        .filter(Objects::nonNull)
+                        .filter(active -> active.category().equals(categoryId))
+                        .count();
+
+                return activeInCategory < categoryMax;
+            }
+        }
+
+        return true;
     }
 
     public void startResearch(ResourceLocation researchId) {

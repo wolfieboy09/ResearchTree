@@ -93,12 +93,10 @@ public class ResearchDetailsPanel {
             return false;
         }
 
-        for (ResourceLocation prereq : node.prerequisites()) {
-            if (!data.isCompleted(prereq)) {
-                return false;
-            }
-        }
-        return true;
+        // Delegates to the same check the server enforces (prerequisites + the configured
+        // global/per-category active-research limits), so the button doesn't lie about
+        // whether starting research will actually succeed.
+        return data.canStartResearch(node.id());
     }
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {

@@ -12,6 +12,7 @@
   "message.researchtree.reward_failed": "Granting you the reward %s has failed! See logs for more.",
   "message.researchtree.table_missing": "You're missing a research table!",
   "message.researchtree.not_your_table": "This research table is not your table...",
+  "message.researchtree.cannot_start_research": "You can't start that research right now",
 
   "toast.researchtree.research_completed": "Research Completed",
 

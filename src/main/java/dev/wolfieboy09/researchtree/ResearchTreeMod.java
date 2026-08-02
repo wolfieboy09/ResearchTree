@@ -3,6 +3,7 @@ package dev.wolfieboy09.researchtree;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.researchtree.client.screen.ResearchTreeScreen;
+import dev.wolfieboy09.researchtree.config.RTServerConfig;
 import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.content.blockentity.ResearchTableBlockEntity;
 import dev.wolfieboy09.researchtree.data.PlayerResearchData;
@@ -17,7 +18,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -31,7 +31,6 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -55,6 +54,7 @@ public class ResearchTreeMod {
         RTCreativeMenu.REGISTER.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.CLIENT, RTClientConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, RTServerConfig.SPEC);
 
         if (LoadingModList.get().getModFileById("kubejs") != null) {
             NeoForge.EVENT_BUS.addListener(KubeEventListeners::researchStarted);

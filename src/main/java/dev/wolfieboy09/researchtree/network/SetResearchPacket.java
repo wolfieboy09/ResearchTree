@@ -69,6 +69,11 @@ public record SetResearchPacket(ResourceLocation researchId) implements CustomPa
                     return;
                 }
 
+                if (!data.canStartResearch(packet.researchId)) {
+                    serverPlayer.sendSystemMessage(Component.translatable("message.researchtree.cannot_start_research"));
+                    return;
+                }
+
                 table.setCurrentResearch(packet.researchId);
 
                 PacketDistributor.sendToPlayer(serverPlayer, new SyncResearchDataPacket(data.save()));
