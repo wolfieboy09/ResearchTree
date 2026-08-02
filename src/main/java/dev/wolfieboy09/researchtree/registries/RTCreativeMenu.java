@@ -17,8 +17,8 @@ public class RTCreativeMenu {
                     CreativeModeTab.builder()
                             .icon(() -> new ItemStack(RTBlocks.RESEARCH_TABLE.get()))
                             .displayItems((params, output) -> {
-                                        output.accept(RTItems.RESEARCH_NOTE);
                                         output.accept(RTItems.RESEARCH_TABLE.get());
+                                        output.accept(RTItems.RESEARCH_NOTE);
                                     }
                             )
                             .title(Component.translatable("creative_tab.researchtree"))
