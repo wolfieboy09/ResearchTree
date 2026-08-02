@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "crafted_note": {
+      "conditions": {
+        "items": [
+          {
+            "items": "researchtree:research_note"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:amethyst_block",
+    "description": {
+      "translate": "advancements.researchtree.crafted_note.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "researchtree:research_note"
+    },
+    "title": {
+      "translate": "advancements.researchtree.crafted_note.title"
+    }
+  },
+  "requirements": [
+    [
+      "crafted_note"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

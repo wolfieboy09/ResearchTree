@@ -51,5 +51,10 @@
   "reward.researchtree.loot_table": "Loot Table: %s",
   "reward.researchtree.recipe.single": "Unlocked Recipe: %s",
   "reward.researchtree.recipe.multiple": "Unlocked Recipes: %s",
-  "reward.kubejs.unlocked_stage": "Unlocks Stage: %s"
+  "reward.kubejs.unlocked_stage": "Unlocks Stage: %s",
+
+  "advancements.researchtree.crafted_note.title": "A Wonderful Note",
+  "advancements.researchtree.crafted_note.description": "Factorio Research Tree? Nah... Acquire a Research Note",
+  "advancements.researchtree.crafted_table.title": "It's Science Time!",
+  "advancements.researchtree.crafted_table.description": "Create the Research Table"
 }
