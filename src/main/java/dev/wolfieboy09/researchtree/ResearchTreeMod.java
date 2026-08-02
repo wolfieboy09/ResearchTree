@@ -135,7 +135,7 @@ public class ResearchTreeMod {
     public static void checkPlayerTable(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
         PlayerResearchData data = player.getData(RTAttachments.RESEARCH_DATA);
-        if (data.hasResearchTable() && !player.isCreative() || !player.isSpectator()) {
+        if (data.hasResearchTable() && !player.isCreative()) {
             player.displayClientMessage(Component.translatable("message.researchtree.already_has_table"), true);
             event.setCanceled(true);
         }
