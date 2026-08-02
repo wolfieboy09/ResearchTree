@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.researchtree.client.screen.ResearchTreeScreen;
 import dev.wolfieboy09.researchtree.config.RTClientConfig;
+import dev.wolfieboy09.researchtree.content.blockentity.ResearchTableBlockEntity;
 import dev.wolfieboy09.researchtree.data.PlayerResearchData;
 import dev.wolfieboy09.researchtree.data.ResearchCategoryManager;
 import dev.wolfieboy09.researchtree.data.ResearchNodeManager;
@@ -135,7 +136,7 @@ public class ResearchTreeMod {
     public static void checkPlayerTable(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
         PlayerResearchData data = player.getData(RTAttachments.RESEARCH_DATA);
-        if (data.hasResearchTable() && !player.isCreative()) {
+        if (event.getLevel().getBlockEntity(event.getPos()) instanceof ResearchTableBlockEntity && data.hasResearchTable() && !player.isCreative()) {
             player.displayClientMessage(Component.translatable("message.researchtree.already_has_table"), true);
             event.setCanceled(true);
         }
