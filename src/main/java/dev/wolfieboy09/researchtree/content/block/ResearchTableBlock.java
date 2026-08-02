@@ -149,7 +149,7 @@ public class ResearchTableBlock extends BaseEntityBlock {
 
         VoxelShape topPlate = Shapes.empty();
         int steps = 8;
-        double totalHeight = 6.5;
+        double totalHeight = 7;
         double totalDepth = 13;
         double stepHeight = totalHeight / steps;
         double stepDepth = totalDepth / steps;
