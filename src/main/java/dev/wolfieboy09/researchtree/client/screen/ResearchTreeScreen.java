@@ -5,7 +5,6 @@ import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
-import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
 import dev.wolfieboy09.researchtree.api.wrapper.GridPosition;
 import dev.wolfieboy09.researchtree.client.screen.layout.ResearchTreeLayoutEngine;
 import dev.wolfieboy09.researchtree.client.screen.layout.TreeNodePosition;
@@ -175,8 +174,7 @@ public class ResearchTreeScreen extends Screen {
 
         Map<ResourceLocation, TreeNodePosition> positions = useAutoLayout
                 ? layoutCache.computeIfAbsent(selectedCategoryId, id ->
-                        ResearchTreeLayoutEngine.layout(nodes, category != null ? category.layoutDirection() : TreeLayoutDirection.TOP_DOWN))
-                : Map.of();
+                        ResearchTreeLayoutEngine.layout(nodes)) : Map.of();
 
         for (ResearchNode node : nodes) {
             if (node.hidden() && !shouldShowHiddenNode(node)) {

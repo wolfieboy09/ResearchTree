@@ -2,7 +2,6 @@ package dev.wolfieboy09.researchtree.integration.kubejs.event.handlers;
 
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
-import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -23,7 +22,6 @@ public class ResearchCategoryBuilder {
     private transient List<ResourceLocation> unlockRequirements = new ArrayList<>();
     private transient int sortOrder;
     private transient boolean autoLayout = true;
-    private transient TreeLayoutDirection layoutDirection = TreeLayoutDirection.TOP_DOWN;
     private transient Optional<Integer> maxActiveResearch = Optional.empty();
 
     private ResearchCategoryModificationJS parentEvent = null;
@@ -46,7 +44,6 @@ public class ResearchCategoryBuilder {
         this.unlockRequirements = category.unlockRequirements();
         this.sortOrder = category.sortOrder();
         this.autoLayout = category.autoLayout();
-        this.layoutDirection = category.layoutDirection();
         this.maxActiveResearch = category.maxActiveResearch();
     }
 
@@ -96,11 +93,6 @@ public class ResearchCategoryBuilder {
         return this;
     }
 
-    public ResearchCategoryBuilder layoutDirection(TreeLayoutDirection direction) {
-        this.layoutDirection = direction;
-        return this;
-    }
-
     /**
      * Overrides how many research nodes a player may have actively in-progress at once within
      * this category. Pass 0 (or negative) to explicitly disable the per-category cap here,
@@ -119,8 +111,7 @@ public class ResearchCategoryBuilder {
     @HideFromJS
     public ResearchCategory build() {
         ResearchCategory category = new ResearchCategory(
-                id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout,
-                layoutDirection, maxActiveResearch
+                id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, maxActiveResearch
         );
 
         if (parentEvent != null) {

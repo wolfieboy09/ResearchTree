@@ -3,7 +3,6 @@ package dev.wolfieboy09.researchtree.api.datagen;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
-import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -83,7 +82,6 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         private final List<ResourceLocation> unlockRequirements = new ArrayList<>();
         private int sortOrder = 0;
         private boolean autoLayout = true;
-        private TreeLayoutDirection layoutDirection = TreeLayoutDirection.TOP_DOWN;
         private Optional<Integer> maxActiveResearch = Optional.empty();
 
         private Builder(ResourceLocation id) {
@@ -137,11 +135,6 @@ public abstract class ResearchCategoryProvider implements DataProvider {
             return this;
         }
 
-        public Builder layoutDirection(TreeLayoutDirection direction) {
-            this.layoutDirection = direction;
-            return this;
-        }
-
         /**
          * Overrides how many research nodes a player may have actively in-progress at once
          * within this specific category. Pass 0 (or negative) to explicitly disable the
@@ -155,8 +148,7 @@ public abstract class ResearchCategoryProvider implements DataProvider {
 
         ResearchCategory build() {
             return new ResearchCategory(
-                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout,
-                    layoutDirection, maxActiveResearch
+                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, maxActiveResearch
             );
         }
     }

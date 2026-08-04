@@ -2,7 +2,6 @@ package dev.wolfieboy09.researchtree.client.screen.layout;
 
 import com.mojang.logging.LogUtils;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
-import dev.wolfieboy09.researchtree.api.research.TreeLayoutDirection;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 
@@ -37,7 +36,7 @@ import java.util.Set;
  *     </li>
  * </ol>
  * The result is expressed as fractional grid unit coordinates ({@link TreeNodePosition}). The caller decides how
- * those map onto pixels and whether the tier axis runs top-to-bottom or left-to-right via {@link TreeLayoutDirection}.
+ * those map onto pixels and whether the tier axis runs top-to-bottom.
  * @apiNote Edges that skip more than one tier (a node's prerequisite living more than one tier back) are not routed
  * through synthetic "dummy" nodes the way a full Sugiyama implementation would. This keeps the algorithm simple and
  * fast, which is more than enough for research trees with just over a hundred or so nodes. It can occasionally
@@ -63,7 +62,7 @@ public final class ResearchTreeLayoutEngine {
      * Computes a layout for the given nodes (which should all belong to a single category/bucket).
      * Nodes referencing prerequisites outside of this collection simply won't have those edges considered.
      */
-    public static Map<ResourceLocation, TreeNodePosition> layout(Collection<ResearchNode> nodes, TreeLayoutDirection direction) {
+    public static Map<ResourceLocation, TreeNodePosition> layout(Collection<ResearchNode> nodes) {
         if (nodes.isEmpty()) {
             return Map.of();
         }
@@ -111,9 +110,11 @@ public final class ResearchTreeLayoutEngine {
             double primary = layerOf.get(id) * LAYER_SPACING;
             double secondary = secondaryAxis.get(id);
 
-            result.put(id, direction.isHorizontal()
-                    ? new TreeNodePosition(primary, secondary)
-                    : new TreeNodePosition(secondary, primary));
+            result.put(id, new TreeNodePosition(primary, secondary));
+
+//            result.put(id, direction.isHorizontal()
+//                    ? new TreeNodePosition(primary, secondary)
+//                    : new TreeNodePosition(secondary, primary));
         }
 
         return result;

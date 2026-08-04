@@ -7,6 +7,7 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.data.ResearchNodeManager;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,16 @@ public class ResearchModificationEventJS implements KubeEvent {
     private final transient Map<ResourceLocation, ResearchNodeBuilder> nodesToAdd = new HashMap<>();
     private final transient Set<ResourceLocation> nodesToRemove = new HashSet<>();
     private final transient Map<ResourceLocation, ResearchNodeBuilder> nodesToModify = new HashMap<>();
+    private final transient @Nullable ResourceLocation insertIntoCategory;
+
+    public ResearchModificationEventJS() {
+        this.insertIntoCategory = null;
+    }
+
+
+    public ResearchModificationEventJS(@Nullable ResourceLocation insertIntoCategory) {
+        this.insertIntoCategory = insertIntoCategory;
+    }
 
     public void remove(ResourceLocation id) {
         nodesToRemove.add(id);

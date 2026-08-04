@@ -87,7 +87,6 @@ public final class ResearchCategoryManager extends SimplePreparableReloadListene
                                 category.unlockRequirements(),
                                 category.sortOrder(),
                                 category.autoLayout(),
-                                category.layoutDirection(),
                                 category.maxActiveResearch()
                         );
                         loaded.put(id, correctedCategory);
