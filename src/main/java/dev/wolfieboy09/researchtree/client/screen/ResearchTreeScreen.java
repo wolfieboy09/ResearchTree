@@ -346,10 +346,10 @@ public class ResearchTreeScreen extends Screen {
     }
 
     private void drawConnectionLine(GuiGraphics guiGraphics, ResearchNodeButton from, ResearchNodeButton to) {
-        int fromX = from.getX() + from.getWidth() / 2;
-        int fromY = from.getY() + from.getHeight() / 2;
-        int toX = to.getX() + to.getWidth() / 2;
-        int toY = to.getY() + to.getHeight() / 2;
+        int exitX = to.getX() + to.getWidth() / 2;
+        int exitY = to.getY() + to.getHeight();
+        int enterX = from.getX() + from.getWidth() / 2;
+        int enterY = from.getY();
 
         int color;
         if (data.isCompleted(to.getNode().id())) {
@@ -360,26 +360,21 @@ public class ResearchTreeScreen extends Screen {
             color = 0xFF888888;
         }
 
-        drawLine(guiGraphics, fromX, fromY, toX, toY, color);
+        int midY = (exitY + enterY) / 2;
+        drawLine(guiGraphics, exitX, exitY, exitX, midY, color);
+        drawLine(guiGraphics, exitX, midY, enterX, midY, color);
+        drawLine(guiGraphics, enterX, midY, enterX, enterY, color);
     }
 
     private static void drawLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int color) {
-        int dx = Math.abs(x2 - x1);
-        int dy = Math.abs(y2 - y1);
-        int steps = Math.max(dx, dy);
-
-        if (steps == 0) return;
-
-        float xStep = (float) (x2 - x1) / steps;
-        float yStep = (float) (y2 - y1) / steps;
-
-        float x = x1;
-        float y = y1;
-
-        for (int i = 0; i <= steps; i++) {
-            guiGraphics.fill((int) x, (int) y, (int) x + 2, (int) y + 2, color);
-            x += xStep;
-            y += yStep;
+        if (x1 == x2) {
+            int minY = Math.min(y1, y2);
+            int maxY = Math.max(y1, y2);
+            guiGraphics.fill(x1, minY, x1 + 2, maxY + 1, color);
+        } else {
+            int minX = Math.min(x1, x2);
+            int maxX = Math.max(x1, x2);
+            guiGraphics.fill(minX, y1, maxX + 1, y1 + 2, color);
         }
     }
 
