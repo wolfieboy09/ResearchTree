@@ -3,11 +3,11 @@ package dev.wolfieboy09.researchtree.api.research;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
+import dev.wolfieboy09.researchtree.config.RTServerConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import dev.wolfieboy09.researchtree.config.RTServerConfig;
 
 import java.util.List;
 import java.util.Optional;

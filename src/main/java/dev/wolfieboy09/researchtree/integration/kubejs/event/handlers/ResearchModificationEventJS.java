@@ -8,7 +8,10 @@ import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.data.ResearchNodeManager;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ResearchModificationEventJS implements KubeEvent {
     private final transient Map<ResourceLocation, ResearchNodeBuilder> nodesToAdd = new HashMap<>();

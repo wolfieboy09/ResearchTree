@@ -1,6 +1,5 @@
 package dev.wolfieboy09.researchtree.client.screen;
 
-import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
@@ -8,6 +7,7 @@ import dev.wolfieboy09.researchtree.client.screen.layout.ResearchTreeLayoutEngin
 import dev.wolfieboy09.researchtree.client.screen.layout.TreeNodePosition;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchDetailsPanel;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchNodeButton;
+import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.data.PlayerResearchData;
 import dev.wolfieboy09.researchtree.data.ResearchCategoryManager;
 import dev.wolfieboy09.researchtree.data.ResearchNodeManager;
@@ -24,12 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ParametersAreNonnullByDefault
 public class ResearchTreeScreen extends Screen {

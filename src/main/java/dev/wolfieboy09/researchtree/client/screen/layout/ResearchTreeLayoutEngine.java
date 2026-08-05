@@ -5,15 +5,7 @@ import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Creates an automatic "proper tree" layout for a set of research nodes in a category, based on the prerequisite without
