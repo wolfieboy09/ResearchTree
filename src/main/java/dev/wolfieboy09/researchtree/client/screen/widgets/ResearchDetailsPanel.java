@@ -27,6 +27,8 @@ public class ResearchDetailsPanel {
     private int panelHeight;
     private static final int PADDING = 10;
 
+    public static final int PANEL_Z_LEVEL = 200;
+
     private Button startButton;
     private Button closeButton;
     private int scrollOffset = 0;
@@ -101,7 +103,7 @@ public class ResearchDetailsPanel {
 
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(0, 0, 20);
+        guiGraphics.pose().translate(0, 0, PANEL_Z_LEVEL);
         guiGraphics.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xF0101010);
 
         // Border

@@ -318,7 +318,10 @@ public class ResearchTreeScreen extends Screen {
         guiGraphics.disableScissor();
 
         if (detailsPanel != null) {
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(0, 0, ResearchDetailsPanel.PANEL_Z_LEVEL);
             guiGraphics.fill(0, 0, width, height, 0x40000000);
+            guiGraphics.pose().popPose();
             detailsPanel.render(guiGraphics, mouseX, mouseY, partialTick);
         }
     }
