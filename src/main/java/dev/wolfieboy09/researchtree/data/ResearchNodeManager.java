@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
-import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.integration.kubejs.KubeJSBridge;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -56,18 +55,8 @@ public final class ResearchNodeManager extends SimplePreparableReloadListener<Ma
 
                     ResourceLocation id = ResourceLocation.fromNamespaceAndPath(namespace, fileName);
 
-                    String categoryName = relativePath.contains("/")
-                            ? relativePath.substring(0, relativePath.lastIndexOf('/'))
-                            : "";
-
                     try (Reader reader = resource.openAsReader()) {
                         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-
-                        if (!json.has("category") && !categoryName.isEmpty()) {
-                            JsonObject categoryJson = new JsonObject();
-                            categoryJson.addProperty("name", categoryName.replace('/', '.'));
-                            json.add("category", categoryJson);
-                        }
 
                         if (json.has("id")) {
                             ResourceLocation parsed = ResourceLocation.tryParse(json.get("id").getAsString());
@@ -111,21 +100,6 @@ public final class ResearchNodeManager extends SimplePreparableReloadListener<Ma
             ResourceLocation id = entry.getKey();
             JsonObject json = entry.getValue();
 
-            if (json.has("category") && json.get("category").isJsonPrimitive()) {
-                String categoryId = json.get("category").getAsString();
-
-                ResourceLocation catId = ResourceLocation.parse(categoryId);
-                ResearchCategory category = ResearchCategoryManager.getCategory(catId);
-
-                if (category != null) {
-                    JsonObject categoryJson = new JsonObject();
-                    categoryJson.addProperty("name", category.name().getString());
-                    json.add("category", ResearchCategory.CODEC.encodeStart(JsonOps.INSTANCE, category).getOrThrow().getAsJsonObject());
-                } else {
-                    LOGGER.warn("Research node {} references unknown category: {}", id, categoryId);
-                }
-            }
-
             ResearchNode.CODEC.decode(JsonOps.INSTANCE, json)
                     .resultOrPartial(err -> LOGGER.error("Error decoding research node {}: {}", id, err))
                     .ifPresent(pair -> {
@@ -138,7 +112,6 @@ public final class ResearchNodeManager extends SimplePreparableReloadListener<Ma
                                 node.prerequisites(),
                                 node.requirements(),
                                 node.rewards(),
-                                node.gridPos(),
                                 node.category(),
                                 node.hidden(),
                                 node.progressData()

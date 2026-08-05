@@ -7,7 +7,6 @@ import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.api.research.ResearchRequirement;
 import dev.wolfieboy09.researchtree.api.research.ResearchReward;
-import dev.wolfieboy09.researchtree.api.wrapper.GridPosition;
 import dev.wolfieboy09.researchtree.data.ResearchCategoryManager;
 import dev.wolfieboy09.researchtree.data.ResearchProgressData;
 import net.minecraft.network.chat.Component;
@@ -30,9 +29,6 @@ public class ResearchNodeBuilder {
     private transient final List<ResourceLocation> prerequisites;
     private transient final List<ResearchRequirement<?>> requirements;
     private transient final List<ResearchReward> rewards;
-    // Only used when the node's category has auto_layout disabled; otherwise the tree layout is
-    // computed automatically from prerequisites and this pin is ignored.
-    private transient Optional<GridPosition> gridPos = Optional.empty();
     @Nullable
     private transient ResourceLocation category = null;
     private transient boolean hidden = false;
@@ -60,8 +56,7 @@ public class ResearchNodeBuilder {
         this.prerequisites = List.copyOf(node.prerequisites());
         this.requirements = List.copyOf(node.requirements());
         this.rewards = List.copyOf(node.rewards());
-        this.category = node.category().orElse(null);
-        this.gridPos = node.gridPos();
+        this.category = node.category();
         this.hidden = node.hidden();
         this.progressData = node.progressData();
     }
@@ -120,17 +115,6 @@ public class ResearchNodeBuilder {
         return this;
     }
 
-    /** Manual position pin. Only takes effect on categories with auto_layout disabled. */
-    public ResearchNodeBuilder pos(int x, int y) {
-        this.gridPos = Optional.of(new GridPosition(x, y));
-        return this;
-    }
-
-
-    public ResearchNodeBuilder position(int x, int y) {
-        return pos(x, y);
-    }
-
     public ResearchNodeBuilder category(ResourceLocation categoryId) {
         if (ResearchCategoryManager.getCategory(categoryId) == null) {
             throw new KubeRuntimeException("The category " + categoryId + " does not exist");
@@ -152,6 +136,12 @@ public class ResearchNodeBuilder {
 
     @HideFromJS
     public ResearchNode build() {
+        if (category == null) {
+            throw new KubeRuntimeException(
+                    "Research node " + id + " must be assigned to a category; call .category() on the builder"
+            );
+        }
+
         ResearchNode node = new ResearchNode(
                 id,
                 icon,
@@ -160,8 +150,7 @@ public class ResearchNodeBuilder {
                 List.copyOf(prerequisites),
                 List.copyOf(requirements),
                 List.copyOf(rewards),
-                gridPos,
-                Optional.ofNullable(category),
+                category,
                 hidden,
                 progressData
         );

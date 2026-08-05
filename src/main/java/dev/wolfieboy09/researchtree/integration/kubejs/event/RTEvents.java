@@ -26,7 +26,9 @@ public interface RTEvents {
             GROUP.server("categoryUnlocked", () -> CategoryUnlockedEventJS.class)
                     .requiredTarget(EventTargetType.ID);
 
-    EventHandler research = GROUP.server("research", () -> ResearchModificationEventJS.class).supportsTarget(EventTargetType.ID);
+    TargetedEventHandler<ResourceLocation> research =
+            GROUP.server("research", () -> ResearchModificationEventJS.class)
+                    .requiredTarget(EventTargetType.ID);
 
     EventHandler categories = GROUP.server("category", () -> ResearchCategoryModificationJS.class);
 }

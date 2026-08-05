@@ -5,7 +5,7 @@ import com.mojang.serialization.JsonOps;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.api.research.ResearchRequirement;
 import dev.wolfieboy09.researchtree.api.research.ResearchReward;
-import dev.wolfieboy09.researchtree.api.wrapper.GridPosition;
+import dev.wolfieboy09.researchtree.client.screen.layout.TreeNodePosition;
 import dev.wolfieboy09.researchtree.data.ResearchProgressData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
@@ -56,9 +56,7 @@ public abstract class ResearchNodeProvider implements DataProvider {
                     .getOrThrow(msg -> new IllegalStateException("Failed to encode node " + node.id() + ": " + msg));
 
             String nodePath = node.id().getPath();
-            String categoryFolder = node.category()
-                    .map(cat -> cat.getPath() + "/")
-                    .orElse("");
+            String categoryFolder = node.category().getPath() + "/";
 
             // data/<namespace>/researchtree/research/<path>.json
             Path filePath = output
@@ -93,8 +91,8 @@ public abstract class ResearchNodeProvider implements DataProvider {
         private final List<ResearchReward> rewards = new ArrayList<>();
         // Only used when the node's category has auto_layout disabled; otherwise the tree layout is
         // computed automatically from prerequisites and this pin is ignored.
-        private Optional<GridPosition> gridPos = Optional.empty();
-        private Optional<ResourceLocation> category = Optional.empty();
+        private Optional<TreeNodePosition> gridPos = Optional.empty();
+        private ResourceLocation category = null;
         private boolean hidden = false;
         private ResearchProgressData progressData = ResearchProgressData.DEFAULT;
 
@@ -149,12 +147,12 @@ public abstract class ResearchNodeProvider implements DataProvider {
 
         /** Manual position pin. Only takes effect on categories with auto_layout disabled. */
         public Builder pos(int x, int y) {
-            this.gridPos = Optional.of(new GridPosition(x, y));
+            this.gridPos = Optional.of(new TreeNodePosition(x, y));
             return this;
         }
 
         public Builder category(ResourceLocation categoryId) {
-            this.category = Optional.of(categoryId);
+            this.category = categoryId;
             return this;
         }
 
@@ -173,10 +171,14 @@ public abstract class ResearchNodeProvider implements DataProvider {
         }
 
         ResearchNode build() {
+            if (category == null) {
+                throw new IllegalStateException("Research node " + id + " must have a category; call category() before building");
+            }
+
             return new ResearchNode(
                     id, icon, title, description,
                     List.copyOf(prerequisites), List.copyOf(requirements),
-                    List.copyOf(rewards), gridPos, category, hidden, progressData
+                    List.copyOf(rewards), category, hidden, progressData
             );
         }
     }

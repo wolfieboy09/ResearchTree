@@ -1,11 +1,9 @@
 package dev.wolfieboy09.researchtree.client.screen;
 
-import dev.wolfieboy09.researchtree.ResearchTreeMod;
 import dev.wolfieboy09.researchtree.config.RTClientConfig;
 import dev.wolfieboy09.researchtree.api.RTUtil;
 import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
-import dev.wolfieboy09.researchtree.api.wrapper.GridPosition;
 import dev.wolfieboy09.researchtree.client.screen.layout.ResearchTreeLayoutEngine;
 import dev.wolfieboy09.researchtree.client.screen.layout.TreeNodePosition;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchDetailsPanel;
@@ -36,7 +34,7 @@ import java.util.Map;
 @ParametersAreNonnullByDefault
 public class ResearchTreeScreen extends Screen {
     private PlayerResearchData data;
-    private ResourceLocation selectedCategoryId = ResearchTreeMod.byId("uncategorized");
+    private ResourceLocation selectedCategoryId = null;
     private final List<Button> categoryButtons = new ArrayList<>();
     private final List<ResearchNodeButton> nodeButtons = new ArrayList<>();
 
@@ -71,7 +69,7 @@ public class ResearchTreeScreen extends Screen {
     private static final int GRID_SIZE = 64;
     private static final int NODE_SIZE = 32;
 
-    // Cached auto layout results, keyed by category id ("uncategorized" bucket included). Cleared whenever
+    // Cached auto layout results, keyed by category id. Cleared whenever
     // nodes/categories are reloaded so datapack/KubeJS changes are picked back up.
     private final Map<ResourceLocation, Map<ResourceLocation, TreeNodePosition>> layoutCache = new HashMap<>();
 
@@ -88,6 +86,10 @@ public class ResearchTreeScreen extends Screen {
 
         layoutCache.clear();
         buildCategoryButtons();
+
+        if (selectedCategoryId != null && ResearchCategoryManager.getCategory(selectedCategoryId) == null) {
+            selectedCategoryId = null;
+        }
 
         if (selectedCategoryId == null && !categoryButtons.isEmpty()) {
             selectedCategoryId = getFirstAvailableCategory();
@@ -164,10 +166,7 @@ public class ResearchTreeScreen extends Screen {
         if (selectedCategoryId == null) return;
 
         Collection<ResearchNode> nodes = ResearchNodeManager.getAllNodes().values().stream()
-                .filter(node ->
-                        node.category().isEmpty()
-                                ? selectedCategoryId.equals(ResearchTreeMod.byId("uncategorized"))
-                                : ResearchCategoryManager.hasCategory(node.category().get())).toList();
+                .filter(node -> node.category().equals(selectedCategoryId)).toList();
 
         ResearchCategory category = ResearchCategoryManager.getCategory(selectedCategoryId);
         boolean useAutoLayout = category == null || category.autoLayout();
@@ -184,15 +183,9 @@ public class ResearchTreeScreen extends Screen {
             double gridX;
             double gridY;
 
-            if (useAutoLayout) {
-                TreeNodePosition pos = positions.get(node.id());
-                gridX = pos != null ? pos.x() : 0;
-                gridY = pos != null ? pos.y() : 0;
-            } else {
-                GridPosition manualPos = node.gridPos().orElse(new GridPosition(0, 0));
-                gridX = manualPos.x();
-                gridY = manualPos.y();
-            }
+            TreeNodePosition pos = positions.get(node.id());
+            gridX = pos != null ? pos.x() : 0;
+            gridY = pos != null ? pos.y() : 0;
 
             ResearchNodeButton button = getNodeButton(node, gridX, gridY);
 

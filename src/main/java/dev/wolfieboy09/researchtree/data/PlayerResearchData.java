@@ -157,20 +157,18 @@ public class PlayerResearchData implements ResearchCategory.PlayerResearchDataAc
             return false;
         }
 
-        Optional<ResourceLocation> categoryId = node.category();
-        if (categoryId.isPresent()) {
-            ResearchCategory category = ResearchCategoryManager.getCategory(categoryId.get());
-            int categoryMax = category != null ? category.resolvedMaxActiveResearch() : RTServerConfig.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH.get();
+        ResourceLocation categoryId = node.category();
+        ResearchCategory category = ResearchCategoryManager.getCategory(categoryId);
+        int categoryMax = category != null ? category.resolvedMaxActiveResearch() : RTServerConfig.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH.get();
 
-            if (categoryMax > 0) {
-                long activeInCategory = activeResearch.keySet().stream()
-                        .map(ResearchNodeManager::getNode)
-                        .filter(Objects::nonNull)
-                        .filter(active -> active.category().equals(categoryId))
-                        .count();
+        if (categoryMax > 0) {
+            long activeInCategory = activeResearch.keySet().stream()
+                    .map(ResearchNodeManager::getNode)
+                    .filter(Objects::nonNull)
+                    .filter(active -> active.category().equals(categoryId))
+                    .count();
 
-                return activeInCategory < categoryMax;
-            }
+            return activeInCategory < categoryMax;
         }
 
         return true;

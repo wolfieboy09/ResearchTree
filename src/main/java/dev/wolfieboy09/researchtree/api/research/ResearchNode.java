@@ -3,7 +3,6 @@ package dev.wolfieboy09.researchtree.api.research;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.wolfieboy09.researchtree.ResearchTreeMod;
-import dev.wolfieboy09.researchtree.api.wrapper.GridPosition;
 import dev.wolfieboy09.researchtree.data.ResearchProgressData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -11,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 
 public record ResearchNode(
         ResourceLocation id,
@@ -21,10 +19,7 @@ public record ResearchNode(
         List<ResourceLocation> prerequisites,
         List<ResearchRequirement<?>> requirements,
         List<ResearchReward> rewards,
-        // Manual pin. Only honored when the node's category has "auto_layout": false;
-        // otherwise position is computed by ResearchTreeLayoutEngine from the prerequisite graph.
-        Optional<GridPosition> gridPos,
-        Optional<ResourceLocation> category,
+        ResourceLocation category,
         boolean hidden,
         ResearchProgressData progressData
 ) {
@@ -39,8 +34,7 @@ public record ResearchNode(
             ResourceLocation.CODEC.listOf().optionalFieldOf("prerequisites", List.of()).forGetter(ResearchNode::prerequisites),
             ResearchRequirement.DISPATCH_CODEC.listOf().optionalFieldOf("requirements", List.of()).forGetter(ResearchNode::requirements),
             ResearchReward.DISPATCH_CODEC.listOf().optionalFieldOf("rewards", List.of()).forGetter(ResearchNode::rewards),
-            GridPosition.CODEC.optionalFieldOf("pos").forGetter(ResearchNode::gridPos),
-            ResourceLocation.CODEC.optionalFieldOf("category").forGetter(ResearchNode::category),
+            ResourceLocation.CODEC.fieldOf("category").forGetter(ResearchNode::category),
             Codec.BOOL.optionalFieldOf("hidden", false).forGetter(ResearchNode::hidden),
             ResearchProgressData.CODEC.optionalFieldOf("progress_data", ResearchProgressData.DEFAULT).forGetter(ResearchNode::progressData)
     ).apply(instance, ResearchNode::new));
