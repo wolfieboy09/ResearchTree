@@ -281,15 +281,11 @@ public class ResearchDetailsPanel {
         return isMouseOver(mouseX, mouseY);
     }
 
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        isDragging = false;
-
+    public void mouseReleased(double mouseX, double mouseY, int button) {
         if (startButton != null) {
             startButton.mouseReleased(mouseX, mouseY, button);
         }
         closeButton.mouseReleased(mouseX, mouseY, button);
-
-        return false;
     }
 
     public boolean mouseDragged(double mouseX, double mouseY) {
