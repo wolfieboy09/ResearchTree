@@ -107,14 +107,10 @@ public final class ResearchTreeLayoutEngine {
 
         Map<ResourceLocation, TreeNodePosition> result = new HashMap<>();
         for (ResourceLocation id : byId.keySet()) {
-            double primary = layerOf.get(id) * LAYER_SPACING;
-            double secondary = secondaryAxis.get(id);
+            double primary = secondaryAxis.get(id);
+            double secondary = layerOf.get(id) * LAYER_SPACING;
 
             result.put(id, new TreeNodePosition(primary, secondary));
-
-//            result.put(id, direction.isHorizontal()
-//                    ? new TreeNodePosition(primary, secondary)
-//                    : new TreeNodePosition(secondary, primary));
         }
 
         return result;

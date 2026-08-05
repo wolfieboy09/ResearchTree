@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 public class ResearchNodeBuilder {
