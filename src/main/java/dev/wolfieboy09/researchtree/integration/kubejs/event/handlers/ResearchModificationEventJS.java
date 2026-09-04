@@ -27,14 +27,14 @@ public class ResearchModificationEventJS implements KubeEvent {
         nodesToRemove.add(id);
     }
 
-    public ResearchNodeBuilder modify(ResourceLocation id) {
-        ResearchNode existing = ResearchNodeManager.getNode(id);
+    public ResearchNodeBuilder modify(KubeResourceLocation id) {
+        ResearchNode existing = ResearchNodeManager.getNode(id.wrapped());
         if (existing == null) {
             throw new KubeRuntimeException("Research node does not exist: " + id);
         }
 
         ResearchNodeBuilder builder = new ResearchNodeBuilder(existing);
-        nodesToModify.put(id, builder);
+        nodesToModify.put(id.wrapped(), builder);
         return builder;
     }
 

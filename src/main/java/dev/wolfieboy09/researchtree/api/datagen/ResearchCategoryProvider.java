@@ -81,7 +81,6 @@ public abstract class ResearchCategoryProvider implements DataProvider {
         private ItemStack icon = ItemStack.EMPTY;
         private final List<ResourceLocation> unlockRequirements = new ArrayList<>();
         private int sortOrder = 0;
-        private boolean autoLayout = true;
         private Optional<Integer> maxActiveResearch = Optional.empty();
 
         private Builder(ResourceLocation id) {
@@ -129,12 +128,6 @@ public abstract class ResearchCategoryProvider implements DataProvider {
             return this;
         }
 
-        /** Disables the automatic tree layout for this category, restoring hand-placed GridPos positioning. */
-        public Builder manualLayout() {
-            this.autoLayout = false;
-            return this;
-        }
-
         /**
          * Overrides how many research nodes a player may have actively in-progress at once
          * within this specific category. Pass 0 (or negative) to explicitly disable the
@@ -148,7 +141,7 @@ public abstract class ResearchCategoryProvider implements DataProvider {
 
         ResearchCategory build() {
             return new ResearchCategory(
-                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, maxActiveResearch
+                    id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, maxActiveResearch
             );
         }
     }

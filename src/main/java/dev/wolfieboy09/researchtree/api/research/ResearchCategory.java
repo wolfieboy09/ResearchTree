@@ -19,7 +19,6 @@ public record ResearchCategory(
         ItemStack icon,
         List<ResourceLocation> unlockRequirements,
         int sortOrder,
-        boolean autoLayout,
         // Overrides Config.DEFAULT_CATEGORY_MAX_ACTIVE_RESEARCH for this category specifically.
         // Empty = use the configured default. <= 0 = no per-category cap for this category.
         Optional<Integer> maxActiveResearch
@@ -31,9 +30,6 @@ public record ResearchCategory(
             ItemStack.SINGLE_ITEM_CODEC.optionalFieldOf("icon", ItemStack.EMPTY).forGetter(ResearchCategory::icon),
             ResourceLocation.CODEC.listOf().optionalFieldOf("unlock_requirement", List.of()).forGetter(ResearchCategory::unlockRequirements),
             Codec.INT.optionalFieldOf("sort_order", 0).forGetter(ResearchCategory::sortOrder),
-            // When true (default), node positions are computed automatically from the prerequisite graph
-            // and any "pos" set on individual nodes is ignored. Set too false to keep hand-placed GridPos layout.
-            Codec.BOOL.optionalFieldOf("auto_layout", true).forGetter(ResearchCategory::autoLayout),
             Codec.INT.optionalFieldOf("max_active_research").forGetter(ResearchCategory::maxActiveResearch)
     ).apply(instance, ResearchCategory::new));
 
@@ -46,7 +42,6 @@ public record ResearchCategory(
                 ItemStack.EMPTY,
                 List.of(),
                 0,
-                true,
                 Optional.empty()
         );
     }
@@ -59,7 +54,6 @@ public record ResearchCategory(
                 icon,
                 List.of(),
                 0,
-                true,
                 Optional.empty()
         );
     }

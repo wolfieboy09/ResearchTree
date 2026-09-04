@@ -21,7 +21,6 @@ public class ResearchCategoryBuilder {
     private transient ItemStack icon;
     private transient List<ResourceLocation> unlockRequirements = new ArrayList<>();
     private transient int sortOrder;
-    private transient boolean autoLayout = true;
     private transient Optional<Integer> maxActiveResearch = Optional.empty();
 
     private ResearchCategoryModificationJS parentEvent = null;
@@ -43,7 +42,6 @@ public class ResearchCategoryBuilder {
         this.icon = category.icon();
         this.unlockRequirements = category.unlockRequirements();
         this.sortOrder = category.sortOrder();
-        this.autoLayout = category.autoLayout();
         this.maxActiveResearch = category.maxActiveResearch();
     }
 
@@ -82,17 +80,6 @@ public class ResearchCategoryBuilder {
         return this;
     }
 
-    /** Disables the automatic tree layout for this category, restoring hand-placed GridPos positioning. */
-    public ResearchCategoryBuilder manualLayout() {
-        this.autoLayout = false;
-        return this;
-    }
-
-    public ResearchCategoryBuilder autoLayout(boolean autoLayout) {
-        this.autoLayout = autoLayout;
-        return this;
-    }
-
     /**
      * Overrides how many research nodes a player may have actively in-progress at once within
      * this category. Pass 0 (or negative) to explicitly disable the per-category cap here,
@@ -111,7 +98,7 @@ public class ResearchCategoryBuilder {
     @HideFromJS
     public ResearchCategory build() {
         ResearchCategory category = new ResearchCategory(
-                id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, autoLayout, maxActiveResearch
+                id, name, description, icon, List.copyOf(unlockRequirements), sortOrder, maxActiveResearch
         );
 
         if (parentEvent != null) {

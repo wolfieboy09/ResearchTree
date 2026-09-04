@@ -5,6 +5,7 @@ import dev.wolfieboy09.researchtree.api.research.ResearchCategory;
 import dev.wolfieboy09.researchtree.api.research.ResearchNode;
 import dev.wolfieboy09.researchtree.client.screen.layout.ResearchTreeLayoutEngine;
 import dev.wolfieboy09.researchtree.client.screen.layout.TreeNodePosition;
+import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchCategoryButton;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchDetailsPanel;
 import dev.wolfieboy09.researchtree.client.screen.widgets.ResearchNodeButton;
 import dev.wolfieboy09.researchtree.config.RTClientConfig;
@@ -30,13 +31,13 @@ import java.util.*;
 public class ResearchTreeScreen extends Screen {
     private PlayerResearchData data;
     private ResourceLocation selectedCategoryId = null;
-    private final List<Button> categoryButtons = new ArrayList<>();
+    private final List<ResearchCategoryButton> categoryButtons = new ArrayList<>();
     private final List<ResearchNodeButton> nodeButtons = new ArrayList<>();
 
     private ResearchDetailsPanel detailsPanel = null;
 
     private static final int CATEGORY_PANEL_WIDTH = 120;
-    private static final int CATEGORY_BUTTON_HEIGHT = 24;
+    private static final int CATEGORY_BUTTON_HEIGHT = 20;
     private static final int CATEGORY_BUTTON_SPACING = 4;
     private static final int PADDING = 8;
 
@@ -124,12 +125,14 @@ public class ResearchTreeScreen extends Screen {
 
         for (ResearchCategory category : unlockedCategories) {
             if (yPos + CATEGORY_BUTTON_HEIGHT >= CATEGORY_HEADER_HEIGHT && yPos < height) {
-                Button categoryBtn = Button.builder(category.name(), btn -> {
+                var categoryBtn = new ResearchCategoryButton(
+                        PADDING, yPos, CATEGORY_PANEL_WIDTH - PADDING * 2, CATEGORY_BUTTON_HEIGHT,
+                        category,
+                        btn -> {
                             selectedCategoryId = category.id();
                             loadNodesForCategory();
-                        })
-                        .bounds(PADDING, yPos, CATEGORY_PANEL_WIDTH - PADDING * 2, CATEGORY_BUTTON_HEIGHT)
-                        .build();
+                    }
+                );
 
                 categoryButtons.add(categoryBtn);
                 this.addRenderableWidget(categoryBtn);
@@ -141,9 +144,11 @@ public class ResearchTreeScreen extends Screen {
         for (ResearchCategory category : lockedCategories) {
             if (yPos + CATEGORY_BUTTON_HEIGHT >= CATEGORY_HEADER_HEIGHT && yPos < height) {
                 Component lockedName = ((MutableComponent) category.name()).withStyle(ChatFormatting.GRAY);
-                Button lockedBtn = Button.builder(lockedName, btn -> {})
-                        .bounds(PADDING, yPos, CATEGORY_PANEL_WIDTH - PADDING * 2, CATEGORY_BUTTON_HEIGHT)
-                        .build();
+                var lockedBtn = new ResearchCategoryButton(
+                        PADDING, yPos, CATEGORY_PANEL_WIDTH - PADDING * 2, CATEGORY_BUTTON_HEIGHT,
+                        category
+                );
+
                 lockedBtn.active = false;
 
                 categoryButtons.add(lockedBtn);
@@ -164,11 +169,9 @@ public class ResearchTreeScreen extends Screen {
                 .filter(node -> node.category().equals(selectedCategoryId)).toList();
 
         ResearchCategory category = ResearchCategoryManager.getCategory(selectedCategoryId);
-        boolean useAutoLayout = category == null || category.autoLayout();
 
-        Map<ResourceLocation, TreeNodePosition> positions = useAutoLayout
-                ? layoutCache.computeIfAbsent(selectedCategoryId, id ->
-                        ResearchTreeLayoutEngine.layout(nodes)) : Map.of();
+        Map<ResourceLocation, TreeNodePosition> positions = layoutCache.computeIfAbsent(selectedCategoryId, id ->
+                ResearchTreeLayoutEngine.layout(nodes));
 
         for (ResearchNode node : nodes) {
             if (node.hidden() && !shouldShowHiddenNode(node)) {
