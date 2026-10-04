@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "craft_note": {
+      "conditions": {
+        "items": [
+          {
+            "items": "researchtree:research_note"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.researchtree.crafted_note.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "researchtree:research_note"
+    },
+    "title": {
+      "translate": "advancements.researchtree.crafted_note.title"
+    }
+  },
+  "requirements": [
+    [
+      "craft_note"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
